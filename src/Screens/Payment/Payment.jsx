@@ -4,15 +4,19 @@ import {TouchableRipple} from 'react-native-paper';
 
 const {width, height} = Dimensions.get('window');
 
-const Payment = ({navigation}) => {
+const Payment = ({route, navigation}) => {
+  const {firstName, lastName, email, password, code, phoneNumber} =
+    route.params;
   const handlePaymnet = () => {
     navigation.navigate('BottomTab');
   };
   return (
     <View style={styles.contianer}>
       <View style={styles.topSectiom}>
-        <Text style={[styles.h1text, styles.userName]}>Name</Text>
-        <Text style={[styles.p1text, styles.EmailUser]}>Example@gmail.com</Text>
+        <Text style={[styles.h1text, styles.userName]}>
+          {firstName} {lastName}
+        </Text>
+        <Text style={[styles.p1text, styles.EmailUser]}>{email}</Text>
         <View style={styles.PriceBox}>
           <Text style={[styles.h1text, styles.priceTag]}>$300</Text>
         </View>

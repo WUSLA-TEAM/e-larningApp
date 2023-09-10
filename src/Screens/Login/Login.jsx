@@ -12,8 +12,12 @@ const {width, height} = Dimensions.get('window');
 
 const Login = ({navigation}) => {
   // auth
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [code, setCode] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   //modal
   const [modalVisible, setModalVisible] = useState(false);
@@ -33,8 +37,14 @@ const Login = ({navigation}) => {
 
   //payment button
   const handlepayment = () => {
-    console.log('Payment');
-    navigation.navigate('Payment');
+    navigation.navigate('Payment', {
+      firstName,
+      lastName,
+      email,
+      password,
+      code,
+      phoneNumber,
+    });
   };
   return (
     <View style={styles.container}>
@@ -56,6 +66,8 @@ const Login = ({navigation}) => {
               placeholderTextColor={'#828282'}
               textContentType="name"
               mode="outline"
+              onChangeText={setFirstName}
+              value={firstName}
             />
             <TextInput
               // value="Arsh"
@@ -64,6 +76,8 @@ const Login = ({navigation}) => {
               placeholderTextColor={'#828282'}
               textContentType="name"
               mode="outline"
+              onChangeText={setLastName}
+              value={lastName}
             />
           </View>
           <TextInput
@@ -73,7 +87,7 @@ const Login = ({navigation}) => {
             placeholderTextColor={'#828282'}
             textContentType="emailAddress"
             mode="outline"
-            onChange={setEmail}
+            onChangeText={setEmail}
             value={email}
           />
           <View style={styles.Number}>
@@ -84,6 +98,8 @@ const Login = ({navigation}) => {
               placeholderTextColor={'#828282'}
               textContentType="telephoneNumber"
               mode="outline"
+              onChangeText={setCode}
+              value={code}
             />
             <TextInput
               // value="Arsh"
@@ -92,6 +108,8 @@ const Login = ({navigation}) => {
               placeholderTextColor={'#828282'}
               textContentType="telephoneNumber"
               mode="outline"
+              onChangeText={setPhoneNumber}
+              value={phoneNumber}
             />
           </View>
           <TextInput
@@ -101,7 +119,7 @@ const Login = ({navigation}) => {
             placeholderTextColor={'#828282'}
             textContentType="password"
             mode="outline"
-            onChange={setPassword}
+            onChangeText={setPassword}
             value={password}
           />
           <TouchableRipple style={styles.buttonPaymnet} onPress={handlepayment}>
