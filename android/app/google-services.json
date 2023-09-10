@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "744773797539",
+    "project_id": "learningappwork",
+    "storage_bucket": "learningappwork.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744773797539:android:c3f8fa09c1c0f39e312116",
+        "android_client_info": {
+          "package_name": "com.wusla.projectapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "744773797539-va10qotm24r9itc56ksg7oq6nfe472b2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wusla.projectapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "744773797539-r2r2flmfreefoidvgg00ikfp5s9ic5ml.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcB6o7Oh6VDIl9A2Ixb-5dysBK1PMCBhs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "744773797539-r2r2flmfreefoidvgg00ikfp5s9ic5ml.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
