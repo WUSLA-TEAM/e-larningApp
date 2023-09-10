@@ -37,15 +37,28 @@ const Login = ({navigation}) => {
 
   //payment button
   const handlepayment = () => {
-    navigation.navigate('Payment', {
-      firstName,
-      lastName,
-      email,
-      password,
-      code,
-      phoneNumber,
-    });
+    if (
+      firstName.trim() === '' ||
+      lastName.trim() === '' ||
+      email.trim() === '' ||
+      code.trim() === '' ||
+      phoneNumber.trim() === '' ||
+      password.trim() === ''
+    ) {
+      // Show an alert or error message indicating that all fields are required.
+      Alert.alert('All fields are required');
+    } else {
+      navigation.navigate('Payment', {
+        firstName,
+        lastName,
+        email,
+        password,
+        code,
+        phoneNumber,
+      });
+    }
   };
+
   return (
     <View style={styles.container}>
       <View style={styles.sectionCompany}>
@@ -121,6 +134,7 @@ const Login = ({navigation}) => {
             mode="outline"
             onChangeText={setPassword}
             value={password}
+            secureTextEntry={true}
           />
           <TouchableRipple style={styles.buttonPaymnet} onPress={handlepayment}>
             <Text style={[styles.h1text, styles.payment]}>Payment</Text>

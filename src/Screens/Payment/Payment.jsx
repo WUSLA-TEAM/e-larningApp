@@ -1,6 +1,7 @@
-import {StyleSheet, Text, View, Dimensions, Alert} from 'react-native';
+import {StyleSheet, Text, View, Dimensions, Alert, Linking} from 'react-native';
 import React from 'react';
 import {TouchableRipple} from 'react-native-paper';
+import {StripeProvider} from '@stripe/stripe-react-native';
 
 const {width, height} = Dimensions.get('window');
 
@@ -8,26 +9,34 @@ const Payment = ({route, navigation}) => {
   const {firstName, lastName, email, password, code, phoneNumber} =
     route.params;
   const handlePaymnet = () => {
-    navigation.navigate('BottomTab');
+    navigation.navigate('BottomTab', {
+      firstName,
+      lastName,
+      email,
+      password,
+    });
   };
+
   return (
-    <View style={styles.contianer}>
-      <View style={styles.topSectiom}>
-        <Text style={[styles.h1text, styles.userName]}>
-          {firstName} {lastName}
-        </Text>
-        <Text style={[styles.p1text, styles.EmailUser]}>{email}</Text>
-        <View style={styles.PriceBox}>
-          <Text style={[styles.h1text, styles.priceTag]}>$300</Text>
+    <StripeProvider publishableKey="pk_test_51NjbBhSDhXlv7KOUYaGMBxrxA39jeTeyafJi5IkE1o253hFF3lslRjGiP0U6IO848O4ri8ACRDBGLRxTKROQrfIC00v5P0Ezp3">
+      <View style={styles.contianer}>
+        <View style={styles.topSectiom}>
+          <Text style={[styles.h1text, styles.userName]}>
+            {firstName} {lastName}
+          </Text>
+          <Text style={[styles.p1text, styles.EmailUser]}>{email}</Text>
+          <View style={styles.PriceBox}>
+            <Text style={[styles.h1text, styles.priceTag]}>$300</Text>
+          </View>
+        </View>
+        <View style={styles.bottomSection}>
+          <TouchableRipple style={styles.buttonPayment} onPress={handlePaymnet}>
+            <Text style={[styles.h1text, styles.PaymentText]}>Payment</Text>
+          </TouchableRipple>
+          <Text>Terms and Condition</Text>
         </View>
       </View>
-      <View style={styles.bottomSection}>
-        <TouchableRipple style={styles.buttonPayment} onPress={handlePaymnet}>
-          <Text style={[styles.h1text, styles.PaymentText]}>Payment</Text>
-        </TouchableRipple>
-        <Text>Terms and Condition</Text>
-      </View>
-    </View>
+    </StripeProvider>
   );
 };
 
