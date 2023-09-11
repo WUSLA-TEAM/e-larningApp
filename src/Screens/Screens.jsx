@@ -16,6 +16,7 @@ import Class from './Class/Class';
 import Latest from './Class/components/Latest';
 import Profile from './Profile/Profile';
 import Chat from './Massege/chat';
+import Razorpay from './Payment/Razorpay/Razorpay';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,7 +36,9 @@ function BottomTab() {
 
 function StackTab() {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
+    <Stack.Navigator
+      screenOptions={{headerShown: false}}
+      initialRouteName="Start">
       <Stack.Screen name="Start" component={Start} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Sign" component={Sign} />
@@ -43,6 +46,7 @@ function StackTab() {
       <Stack.Screen name="BottomTab" component={BottomTab} />
       <Stack.Screen name="Latest" component={Latest} />
       <Stack.Screen name="Payment" component={Payment} />
+      <Stack.Screen name="Razorpay" component={Razorpay} />
     </Stack.Navigator>
   );
 }

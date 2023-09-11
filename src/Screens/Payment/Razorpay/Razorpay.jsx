@@ -33,7 +33,7 @@ const Razorpay = () => {
       <Text style={styles.text}>React</Text>
       <Image
         style={styles.productImage}
-        source={require('./assets/dark.png')}
+        source={require('../../../../assets/images/logo.png')}
       />
       <Text style={styles.text}>Rs. 500</Text>
       <View style={styles.button}>

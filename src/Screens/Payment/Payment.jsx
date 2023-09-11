@@ -1,5 +1,8 @@
-import {StyleSheet, Text, View, Dimensions, Alert, Linking} from 'react-native';
 import React from 'react';
+import {StyleSheet, Text, View, Dimensions, Alert} from 'react-native';
+import RazorpayCheckout from 'react-native-razorpay';
+import firebase from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
 import {TouchableRipple} from 'react-native-paper';
 
 const {width, height} = Dimensions.get('window');
@@ -7,29 +10,63 @@ const {width, height} = Dimensions.get('window');
 const Payment = ({route, navigation}) => {
   const {firstName, lastName, email, password, code, phoneNumber} =
     route.params;
-  const handlePaymnet = () => {
-    navigation.navigate('BottomTab', {
-      firstName,
-      lastName,
-      email,
-      password,
-    });
+
+  const handlePayment = () => {
+    let options = {
+      name: 'wusla',
+      description: 'fast secure',
+      currency: 'INR',
+      amount: 100,
+      key: 'rzp_test_3HRoVAqaDcF28T',
+      prefill: {
+        email: email,
+        contact: phoneNumber,
+        name: `${firstName} ${lastName}`,
+      },
+      theme: {color: '#f37251'},
+    };
+    RazorpayCheckout.open(options)
+      .then(data => {
+        console.log('data', data);
+        Alert.alert('Successfully paid');
+
+        // Handle user authentication using Firebase
+        handleUserAuthentication(email, password);
+
+        // Navigate to the desired screen upon successful payment
+        navigation.navigate('BottomTab');
+      })
+      .catch(error => {
+        console.log(error);
+        Alert.alert(`Error: ${error.code} | ${error.description}`);
+      });
+  };
+
+  const handleUserAuthentication = async (email, password) => {
+    try {
+      await firebase.auth().createUserWithEmailAndPassword(email, password);
+      // User creation successful
+      // You can add additional logic here if needed
+    } catch (error) {
+      console.error('Error creating user:', error);
+      // Handle errors (e.g., display an error message)
+    }
   };
 
   return (
-    <View style={styles.contianer}>
-      <View style={styles.topSectiom}>
-        <Text style={[styles.h1text, styles.userName]}>
+    <View style={styles.container}>
+      <View style={styles.topSection}>
+        <Text style={[styles.heading, styles.userName]}>
           {firstName} {lastName}
         </Text>
-        <Text style={[styles.p1text, styles.EmailUser]}>{email}</Text>
-        <View style={styles.PriceBox}>
-          <Text style={[styles.h1text, styles.priceTag]}>$300</Text>
+        <Text style={[styles.text, styles.email]}>{email}</Text>
+        <View style={styles.priceBox}>
+          <Text style={[styles.heading, styles.priceTag]}>$300</Text>
         </View>
       </View>
       <View style={styles.bottomSection}>
-        <TouchableRipple style={styles.buttonPayment} onPress={handlePaymnet}>
-          <Text style={[styles.h1text, styles.PaymentText]}>Payment</Text>
+        <TouchableRipple style={styles.buttonPayment} onPress={handlePayment}>
+          <Text style={[styles.heading, styles.paymentText]}>Payment</Text>
         </TouchableRipple>
         <Text>Terms and Condition</Text>
       </View>
@@ -37,25 +74,22 @@ const Payment = ({route, navigation}) => {
   );
 };
 
-export default Payment;
-
 const styles = StyleSheet.create({
-  h1text: {
+  container: {
+    flex: 1,
+  },
+  heading: {
     fontFamily: Platform.OS === 'android' ? 'OpenSans-Bold' : 'SF-Pro',
     fontSize: height * 0.04,
     fontWeight: 'bold',
   },
-  p1text: {
+  text: {
     fontFamily: 'OpenSans-Regular',
     fontSize: height * 0.017,
     fontWeight: '400',
   },
-  contianer: {
-    flex: 1,
-  },
-  topSectiom: {
+  topSection: {
     backgroundColor: '#131D35',
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     height: height * 0.6,
@@ -65,37 +99,35 @@ const styles = StyleSheet.create({
   userName: {
     color: '#FFF',
   },
-  EmailUser: {
+  email: {
     color: '#FFF',
   },
-  PriceBox: {
+  priceBox: {
     backgroundColor: '#FFF',
     height: height * 0.08,
     width: width * 0.4,
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: width * 0.023,
     marginTop: height * 0.023,
   },
   bottomSection: {
-    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     height: height * 0.4,
-    // backgroundColor: '#242424',
   },
   buttonPayment: {
     height: height * 0.1,
     width: width * 0.6,
     backgroundColor: '#131D35',
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: width * 0.023,
   },
-  PaymentText: {
+  paymentText: {
     color: '#FFF',
     fontSize: height * 0.03,
   },
 });
+
+export default Payment;
