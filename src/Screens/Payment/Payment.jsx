@@ -1,18 +1,17 @@
 import React from 'react';
 import {StyleSheet, Text, View, Dimensions, Alert} from 'react-native';
 import RazorpayCheckout from 'react-native-razorpay';
-import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import {TouchableRipple} from 'react-native-paper';
 
 const {width, height} = Dimensions.get('window');
 
 const Payment = ({route, navigation}) => {
-  const {firstName, lastName, email, password, code, phoneNumber} =
+  const {firstName, lastName, email, password, phoneNumber, code} =
     route.params;
 
   const handlePayment = () => {
-    let options = {
+    const options = {
       name: 'wusla',
       description: 'fast secure',
       currency: 'INR',
@@ -20,31 +19,44 @@ const Payment = ({route, navigation}) => {
       key: 'rzp_test_3HRoVAqaDcF28T',
       prefill: {
         email: email,
-        contact: phoneNumber,
+        contact: phoneNumber, // Replace 'PHONE_NUMBER' with the actual phone number
         name: `${firstName} ${lastName}`,
       },
       theme: {color: '#f37251'},
     };
+
     RazorpayCheckout.open(options)
-      .then(data => {
+      .then(async data => {
         console.log('data', data);
         Alert.alert('Successfully paid');
 
         // Handle user authentication using Firebase
-        handleUserAuthentication(email, password);
+        await handleUserAuthentication(email, password);
+
+        // Add user data to Firestore
+        const user = {
+          firstName,
+          lastName,
+          email,
+          phoneNumber: `${code} ${phoneNumber}`, // Replace with the actual phone number
+          paymentAmount: 300, // Change this to the actual payment amount
+        };
+        await addUserToFirestore(user);
 
         // Navigate to the desired screen upon successful payment
         navigation.navigate('BottomTab');
       })
       .catch(error => {
         console.log(error);
-        Alert.alert(`Error: ${error.code} | ${error.description}`);
+        Alert.alert(
+          `Dear: ${lastName}, Thank you for your support. Please try again later.`,
+        );
       });
   };
 
   const handleUserAuthentication = async (email, password) => {
     try {
-      await firebase.auth().createUserWithEmailAndPassword(email, password);
+      await auth().createUserWithEmailAndPassword(email, password);
       // User creation successful
       // You can add additional logic here if needed
     } catch (error) {

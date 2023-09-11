@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@firebase/app": "^0.9.18",
+    "@firebase/firestore": "^4.1.3",
     "@react-native-community/cli-plugin-metro": "^11.3.7",
-    "@react-native-firebase/app": "^18.3.2",
+    "@react-native-firebase/app": "^18.4.0",
     "@react-native-firebase/auth": "^18.3.2",
+    "@react-native-firebase/firestore": "^18.4.0",
     "@react-navigation/material-bottom-tabs": "^6.2.16",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",

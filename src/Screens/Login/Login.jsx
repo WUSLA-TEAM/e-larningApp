@@ -3,9 +3,12 @@ import React, {useState} from 'react';
 import {TextInput, TouchableRipple} from 'react-native-paper';
 import auth from '@react-native-firebase/auth';
 import app from '@react-native-firebase/app';
+import Firestore from '@react-native-firebase/firestore';
 
 //termModal
 import TermsModal from '../Modal/TermsModal';
+
+const userCollection = Firestore().collection('user');
 
 //responsive
 const {width, height} = Dimensions.get('window');
