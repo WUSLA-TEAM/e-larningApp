@@ -8,7 +8,7 @@ const Razorpay = () => {
       name: 'Wusla',
       description: 'fast secure',
       currency: 'INR',
-      amount: 50000,
+      amount: 500,
       key: 'rzp_test_3bVAi7XMPRnnwe',
       prefill: {
         email: 'ss@gmail.com',
