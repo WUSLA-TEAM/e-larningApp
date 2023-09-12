@@ -7,58 +7,86 @@ import {
   Dimensions,
   Alert,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 
 const {width, height} = Dimensions.get('window');
 
 const DATA = [
   {
-    id: 1,
+    id: '1', // Change to a string
     title: 'first Clall',
   },
   {
-    id: 2,
+    id: '2', // Change to a string
     title: 'Second Clall',
   },
   {
-    id: 3, // Change the id to be unique
+    id: '3', // Change to a string
     title: 'Third Clall',
   },
+  {
+    id: '4', // Change to a string
+    title: 'forth Clall',
+  },
+  // Add more items as needed
 ];
 
-const keyExtractor = item => item.id; // Use 'item' instead of 'items'
+const keyExtractor = item => item.id.toString(); // Use 'item' instead of 'items' and convert to a string
 
 const renderListItem = ({item}) => {
-  // Change 'rnederItem' to 'renderListItem'
+  console.log(keyExtractor);
   return (
-    <View>
+    <View key={item.id.toString()}>
       <TouchableHighlight
         onPress={() => Alert.alert('Wait')}
         style={styles.columTouch}>
-        <Text key={item.id}>{item.title}</Text>
-        {/* Use 'item' instead of 'items' */}
+        <Text style={styles.textgrid}>{item.title}</Text>
       </TouchableHighlight>
     </View>
   );
 };
 
 export const Grid = () => {
+  const [numColumns, setNumColumns] = useState(2); // Initial number of columns
+
   return (
     <View>
       <FlatList
         data={DATA}
         renderItem={renderListItem}
         keyExtractor={keyExtractor}
-        numColumns={4}
+        numColumns={numColumns}
       />
+      {/* Add a button or some UI element to change the number of columns */}
+      <TouchableHighlight
+        onPress={() => setNumColumns(3)} // Change the number of columns here
+        style={styles.changeColumnsButton}>
+        <Text>Change Columns</Text>
+      </TouchableHighlight>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   columTouch: {
-    width: width * 0.06,
-    height: height * 0.021,
-    backgroundColor: '#242424',
+    width: width * 0.46, // Adjust the width to create 2 columns
+    height: height * 0.18,
+    backgroundColor: '#131D35',
+    marginLeft: width * 0.02, // Adjust the margin as needed
+    marginTop: height * 0.03,
+    borderRadius: width * 0.023,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  changeColumnsButton: {
+    marginTop: 10,
+    backgroundColor: '#7D59BC',
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textgrid: {
+    color: '#FFF',
   },
 });
