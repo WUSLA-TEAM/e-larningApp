@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,9 +10,23 @@ import {
 } from 'react-native';
 import {TouchableRipple} from 'react-native-paper';
 
+import {UserContext} from '../../Server/Firebase/Firestore/FirestoreService';
+
 const {width, height} = Dimensions.get('window');
 
 const Profile = () => {
+  const userData = useContext(UserContext);
+
+  // Check if userInfo is null before accessing its properties
+  if (!userData) {
+    return (
+      <View style={styles.topSectionbox}>
+        <Text style={[styles.h1text, styles.userGreeting]}>
+          Loading user data...
+        </Text>
+      </View>
+    );
+  }
   const [data, setData] = useState([]);
 
   const getAPIData = async () => {
@@ -37,7 +51,7 @@ const Profile = () => {
           source={require('../../../assets/images/logo.png')}
           style={styles.imageOfUser}
         />
-        <Text style={[styles.UserName, styles.h1Text]}>Name</Text>
+        <Text style={[styles.UserName, styles.h1Text]}>{userData.name}</Text>
       </View>
       <View style={styles.middleSection}>
         {data.length ? (

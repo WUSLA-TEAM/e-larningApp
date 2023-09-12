@@ -6,16 +6,35 @@ import {
   Dimensions,
   TouchableHighlight,
 } from 'react-native';
-import React from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Grid} from './Components/Grid';
+
+import {UserContext} from '../../Server/Firebase/Firestore/FirestoreService';
+
+//auth
+import FirestoreService from '../../Server/Firebase/Firestore/FirestoreService';
 
 const {width, height} = Dimensions.get('window');
 
 const Home = () => {
+  const userData = useContext(UserContext);
+
+  // Check if userInfo is null before accessing its properties
+  if (!userData) {
+    return (
+      <View style={styles.topSectionbox}>
+        <Text style={[styles.h1text, styles.userGreeting]}>
+          Loading user data...
+        </Text>
+      </View>
+    );
+  }
   return (
     <View style={styles.container}>
       <View style={styles.topSectionbox}>
-        <Text style={[styles.h1text, styles.userGreeting]}>Hello Name,</Text>
+        <Text style={[styles.h1text, styles.userGreeting]}>
+          Hello {userData.name},
+        </Text>
         <Text style={[styles.h1text, styles.WelcomeText]}>Start Lesson!</Text>
         <View style={styles.lessonsSection}>
           <Text style={[styles.p1text, styles.lesstonText]}>Lessons</Text>

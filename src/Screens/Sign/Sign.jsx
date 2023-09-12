@@ -1,11 +1,44 @@
 import {StyleSheet, Text, View, Dimensions, Image, Alert} from 'react-native';
 import React, {useState} from 'react';
 import {TextInput, TouchableRipple} from 'react-native-paper';
+
+//firebase auth
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 // import TermsModal from '../src/Privacy/TermsModal';
 
 const {width, height} = Dimensions.get('window');
 
 const Sign = ({navigation}) => {
+  //auth
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const hndleContinue = async () => {
+    if ((email === '') | (password === '')) {
+      Alert.alert('Inputs are required');
+      return;
+    }
+    try {
+      const userCredential = await auth().signInWithEmailAndPassword(
+        email,
+        password,
+      );
+
+      if (userCredential && userCredential.user) {
+        const userUid = userCredential.user.email;
+
+        console.log(userUid);
+
+        navigation.navigate('BottomTab');
+      }
+    } catch (error) {
+      console.log(`Error : ${error}`);
+      Alert.alert(`Error: ${error}`);
+    }
+  };
+
   const handleMotion = () => {
     navigation.navigate('BottomTab');
     // console.log('Hi');
@@ -41,6 +74,8 @@ const Sign = ({navigation}) => {
             placeholderTextColor={'#FFF'}
             textContentType="emailAddress"
             mode="outline"
+            value={email}
+            onChangeText={setEmail}
           />
           <TextInput
             // value="Arsh"
@@ -48,10 +83,12 @@ const Sign = ({navigation}) => {
             placeholder="Password"
             placeholderTextColor={'#FFF'}
             textContentType="password"
+            value={password}
+            onChangeText={setPassword}
           />
           <TouchableRipple
             style={styles.buttonContinue}
-            onPress={handleMotion}
+            onPress={hndleContinue}
             rippleColor="#C5A5FF">
             <Text style={[styles.h1Text, styles.buttonText]}>Continue</Text>
           </TouchableRipple>

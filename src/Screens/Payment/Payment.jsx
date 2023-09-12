@@ -1,14 +1,46 @@
 import React from 'react';
-import {StyleSheet, Text, View, Dimensions, Alert} from 'react-native';
+import {StyleSheet, Text, View, Dimensions, Alert, Easing} from 'react-native';
 import RazorpayCheckout from 'react-native-razorpay';
 import auth from '@react-native-firebase/auth';
 import {TouchableRipple} from 'react-native-paper';
+import firestore from '@react-native-firebase/firestore';
 
 const {width, height} = Dimensions.get('window');
 
 const Payment = ({route, navigation}) => {
   const {firstName, lastName, email, password, phoneNumber, code} =
     route.params;
+
+  //firestore funtion work
+  const handleSubmit = async () => {
+    try {
+      // Get the current user object
+      const user = auth().currentUser;
+
+      if (user) {
+        // Get the user id
+        const userId = user.uid;
+
+        // Use the user id as the document name instead of the email
+        await firestore()
+          .collection('user')
+          .doc(userId)
+          .set({
+            name: `${firstName} ${lastName}`,
+            email: email,
+            phoneNumber: `${code} ${phoneNumber}`,
+            password: password,
+          });
+
+        console.log('Document successfully written!');
+      } else {
+        console.error('No authenticated user');
+        // Handle the case where there is no authenticated user
+      }
+    } catch (error) {
+      console.error('Error writing document: ', error);
+    }
+  };
 
   const handlePayment = () => {
     const options = {
@@ -33,15 +65,8 @@ const Payment = ({route, navigation}) => {
         // Handle user authentication using Firebase
         await handleUserAuthentication(email, password);
 
-        // Add user data to Firestore
-        const user = {
-          firstName,
-          lastName,
-          email,
-          phoneNumber: `${code} ${phoneNumber}`, // Replace with the actual phone number
-          paymentAmount: 300, // Change this to the actual payment amount
-        };
-        await addUserToFirestore(user);
+        //after payment to the firestore
+        handleSubmit();
 
         // Navigate to the desired screen upon successful payment
         navigation.navigate('BottomTab');

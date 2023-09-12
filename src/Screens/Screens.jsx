@@ -17,6 +17,7 @@ import Latest from './Class/components/Latest';
 import Profile from './Profile/Profile';
 import Chat from './Massege/chat';
 import Razorpay from './Payment/Razorpay/Razorpay';
+import FirestoreService from '../Server/Firebase/Firestore/FirestoreService';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,14 +48,17 @@ function StackTab() {
       <Stack.Screen name="Latest" component={Latest} />
       <Stack.Screen name="Payment" component={Payment} />
       <Stack.Screen name="Razorpay" component={Razorpay} />
+      <Stack.Screen name="FirestoreService" component={FirestoreService} />
     </Stack.Navigator>
   );
 }
 
 export const Screens = () => {
   return (
-    <NavigationContainer>
-      <StackTab />
-    </NavigationContainer>
+    <FirestoreService>
+      <NavigationContainer>
+        <StackTab />
+      </NavigationContainer>
+    </FirestoreService>
   );
 };

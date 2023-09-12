@@ -4,7 +4,7 @@ import {Screens} from './src/Screens/Screens';
 import Main from './src/Server/Firebase/Firestore/Main';
 
 const App = () => {
-  return <Main />;
+  return <Screens />;
 };
 
 export default App;
