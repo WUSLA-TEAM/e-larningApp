@@ -5,6 +5,8 @@ import {
   Image,
   Dimensions,
   TouchableHighlight,
+  Alert,
+  TextInput,
 } from 'react-native';
 import React, {useState, useEffect, useContext} from 'react';
 import {Grid} from './Components/Grid';

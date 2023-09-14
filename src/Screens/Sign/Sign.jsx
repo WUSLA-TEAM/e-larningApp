@@ -69,6 +69,8 @@ const Sign = ({navigation}) => {
         <View style={styles.topSection}>
           <TextInput
             // value="Arsh"
+            // theme={{colors: {text: '#fff'}}}
+            autoCorrect={false}
             style={[styles.input, styles.emailInput]}
             placeholder="Email"
             placeholderTextColor={'#FFF'}
@@ -194,7 +196,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: width * 0.89,
-    backgroundColor: '#131D35',
+    backgroundColor: 'transparent',
     color: '#FFF',
     borderBottomWidth: height * 0.001,
     borderBottomColor: '#FFF',
