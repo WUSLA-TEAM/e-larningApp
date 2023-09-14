@@ -1,72 +1,77 @@
+// UploadScreen.js
+
 import React, {useState} from 'react';
-import {View, Text, Button} from 'react-native';
-
-// Import react-native-image-crop-picker
-import ImagePicker from 'react-native-image-crop-picker';
-
-// Import react-native-fetch-blob
-import RNFetchBlob from 'react-native-fetch-blob';
-
-// Import @react-native-firebase/storage and @react-native-firebase/firestore
+import {View, Text, TextInput, Button, Alert} from 'react-native';
+import {launchImageLibrary} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
 
 const Storage = () => {
-  const [video, setVideo] = useState();
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [notes, setNotes] = useState('');
+  const [videoUri, setVideoUri] = useState('');
 
-  // Define a function to handle the button press
-  const handleButtonPress = () => {
-    // Launch the image picker
-    ImagePicker.openPicker({
+  const handleVideoSelect = () => {
+    const options = {
       mediaType: 'video',
-    }).then(response => {
-      // Get the video uri
-      const uri = response.path;
+    };
 
-      // Set the video state to the uri
-      setVideo(uri);
-
-      // Create a blob from the video uri
-      RNFetchBlob.fs.readFile(uri, 'base64').then(data => {
-        let blob = RNFetchBlob.polyfill.Blob.build(data, {
-          type: 'video/mp4;BASE64',
-        });
-
-        // Get a reference to the storage bucket
-        const reference = storage().ref(video);
-
-        // Upload the blob to Firebase Storage
-        reference.put(blob).then(() => {
-          console.log('Video uploaded successfully');
-
-          // Get the download URL of the video
-          reference.getDownloadURL().then(url => {
-            console.log('Video download URL: ', url);
-
-            // Upload the title, description and download URL to Firestore
-            firestore()
-              .collection('videos')
-              .add({
-                title: 'Some title',
-                description: 'Some description',
-                url: url,
-              })
-              .then(() => {
-                console.log('Video data uploaded to Firestore');
-              })
-              .catch(error => {
-                console.log('Video data upload error: ', error);
-              });
-          });
-        });
-      });
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled video selection');
+      } else if (response.error) {
+        console.error('ImagePicker Error: ', response.error);
+      } else {
+        setVideoUri(response.uri);
+      }
     });
+  };
+
+  const handleUpload = async () => {
+    if (!name || !description || !notes || !videoUri) {
+      Alert.alert('All fields are required.');
+      return;
+    }
+
+    // Upload video to Firebase Storage
+    const videoRef = storage().ref(`videos/${name}.mp4`);
+    await videoRef.putFile(videoUri);
+
+    // Get the download URL
+    const downloadURL = await videoRef.getDownloadURL();
+
+    // Upload metadata to Firestore
+    await firestore().collection('videos').add({
+      name,
+      description,
+      notes,
+      url: downloadURL,
+    });
+
+    Alert.alert('Video uploaded successfully!');
+    setName('');
+    setDescription('');
+    setNotes('');
+    setVideoUri('');
   };
 
   return (
     <View>
-      <Text>Storage</Text>
-      <Button title="Select Video" onPress={handleButtonPress} />
+      <Text>Name</Text>
+      <TextInput value={name} onChangeText={setName} />
+      <Text>Description</Text>
+      <TextInput value={description} onChangeText={setDescription} />
+      <Text>Notes</Text>
+      <TextInput value={notes} onChangeText={setNotes} />
+      <Button title="Select Video" onPress={handleVideoSelect} />
+      {videoUri ? (
+        <Text>Selected Video: {videoUri}</Text>
+      ) : (
+        <Text>No video selected</Text>
+      )}
+      <Button title="Upload" onPress={handleUpload} />
+      {/* <Button title="View Videos" onPress={() => navigation.navigate('View')} /> */}
     </View>
   );
 };
