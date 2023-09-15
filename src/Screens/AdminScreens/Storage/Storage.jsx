@@ -1,10 +1,9 @@
-// UploadScreen.js
-
 import React, {useState} from 'react';
 import {View, Text, TextInput, Button, Alert} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
+import Video from 'react-native-video';
 
 const Storage = () => {
   const [name, setName] = useState('');
@@ -23,7 +22,8 @@ const Storage = () => {
       } else if (response.error) {
         console.error('ImagePicker Error: ', response.error);
       } else {
-        setVideoUri(response.uri);
+        setVideoUri(response.assets[0].uri);
+        console.log(response.assets[0].uri);
       }
     });
   };
@@ -66,12 +66,16 @@ const Storage = () => {
       <TextInput value={notes} onChangeText={setNotes} />
       <Button title="Select Video" onPress={handleVideoSelect} />
       {videoUri ? (
-        <Text>Selected Video: {videoUri}</Text>
+        <Video
+          source={{uri: videoUri}}
+          resizeMode="contain"
+          style={{width: 200, height: 200}}
+        />
       ) : (
         <Text>No video selected</Text>
       )}
       <Button title="Upload" onPress={handleUpload} />
-      {/* <Button title="View Videos" onPress={() => navigation.navigate('View')} /> */}
+      <Button title="View Videos" onPress={() => navigation.navigate('View')} />
     </View>
   );
 };
