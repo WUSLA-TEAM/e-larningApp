@@ -1,45 +1,42 @@
-// Import React and React Native components
 import React, {createContext, useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
-
-// Import firestore and auth from '@react-native-firebase/firestore'
-import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
-// Create a user context
 export const UserContext = createContext();
 
-// Define a function component for the user provider
 const FirestoreService = ({children}) => {
-  // Use state to store the user data
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState(null);
 
-  // Use effect to fetch the user data from Firestore
   useEffect(() => {
-    // Get the current user object
-    const user = auth().currentUser;
+    const fetchUserData = async () => {
+      try {
+        const user = auth().currentUser;
 
-    // Get the user id
-    const userId = user.uid;
+        if (user) {
+          const userId = user.uid;
+          const userDocument = firestore().collection('user').doc(userId);
+          const documentSnapshot = await userDocument.get();
 
-    // Get a reference to the user document by the user id
-    const userDocument = firestore().collection('user').doc(userId);
-
-    // Get the document data
-    userDocument.get().then(documentSnapshot => {
-      // Check if the document exists
-      if (documentSnapshot.exists) {
-        // Set the user data state to the document data
-        setUserData(documentSnapshot.data());
+          if (documentSnapshot.exists) {
+            const data = documentSnapshot.data();
+            setUserData(data);
+          } else {
+            console.error('User document does not exist');
+          }
+        } else {
+          console.error('User is not authenticated');
+        }
+      } catch (error) {
+        console.error('Error fetching user data:', error);
       }
-    });
+    };
+
+    fetchUserData();
   }, []);
 
-  // Return a user context provider with the user data value
   return (
     <UserContext.Provider value={userData}>{children}</UserContext.Provider>
   );
 };
 
-// Export the user provider component
 export default FirestoreService;

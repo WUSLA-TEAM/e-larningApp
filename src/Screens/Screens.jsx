@@ -1,7 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-
-//navigaetion
+import React, {useContext} from 'react'; // Make sure to import useContext here
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
@@ -17,21 +14,28 @@ import Latest from './Class/components/Latest';
 import Profile from './Profile/Profile';
 import Chat from './Massege/chat';
 import Razorpay from './Payment/Razorpay/Razorpay';
-import FirestoreService from '../Server/Firebase/Firestore/FirestoreService';
 import Storage from './AdminScreens/Storage/Storage';
+import Admin from './AdminScreens/Admin';
+
+import FirestoreService, {
+  UserContext,
+} from '../Server/Firebase/Firestore/FirestoreService';
 
 const Stack = createNativeStackNavigator();
-
-//bottom navigation
 const Bottom = createMaterialBottomTabNavigator();
 
 function BottomTab() {
+  const userData = useContext(UserContext);
+
   return (
     <Bottom.Navigator initialRouteName="Home">
       <Bottom.Screen name="Home" component={Home} />
       <Bottom.Screen name="Class" component={Class} />
       <Bottom.Screen name="Profile" component={Profile} />
       <Bottom.Screen name="Chat" component={Chat} />
+      {userData.isAdmin ? (
+        <Bottom.Screen name="Admin" component={Admin} />
+      ) : null}
     </Bottom.Navigator>
   );
 }
