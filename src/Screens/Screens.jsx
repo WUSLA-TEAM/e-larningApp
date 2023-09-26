@@ -19,6 +19,7 @@ import Chat from './Massege/chat';
 import Razorpay from './Payment/Razorpay/Razorpay';
 import FirestoreService from '../Server/Firebase/Firestore/FirestoreService';
 import Storage from './AdminScreens/Storage/Storage';
+import ElevatedCards from './Profile/Components/TopCards/ElevatedCards';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,8 @@ function StackTab() {
       <Stack.Screen name="Razorpay" component={Razorpay} />
       <Stack.Screen name="FirestoreService" component={FirestoreService} />
       <Stack.Screen name="Storage" component={Storage} />
+      <Stack.Screen name="ElevatedCards" component={ElevatedCards} />
+      <Stack.Screen name="Class" component={Class} />
     </Stack.Navigator>
   );
 }

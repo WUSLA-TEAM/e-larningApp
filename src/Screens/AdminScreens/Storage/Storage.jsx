@@ -3,11 +3,11 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   Alert,
   StyleSheet,
   Dimensions,
   Image,
+  ScrollView,
 } from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
@@ -22,99 +22,192 @@ const Storage = () => {
   const [description, setDescription] = useState('');
   const [notes, setNotes] = useState('');
   const [videoUri, setVideoUri] = useState('');
+  const [imageUri, setImageUri] = useState('');
 
-  const handleVideoSelect = () => {
+  const handleVideoSelect = async () => {
     const options = {
       mediaType: 'video',
     };
 
-    launchImageLibrary(options, response => {
+    try {
+      const response = await launchImageLibrary(options);
+
       if (response.didCancel) {
-        console.log('User cancelled video selection');
+        Alert.alert('You cancelled video selection.');
       } else if (response.error) {
-        console.error('ImagePicker Error: ', response.error);
+        Alert.alert('Error selecting video:', response.error);
       } else {
         setVideoUri(response.assets[0].uri);
-        console.log(response.assets[0].uri);
       }
-    });
+    } catch (error) {
+      Alert.alert('Error selecting video:', error.message);
+    }
+  };
+
+  const handleImageSelect = async () => {
+    const options = {
+      mediaType: 'photo',
+    };
+
+    try {
+      const response = await launchImageLibrary(options);
+
+      if (response.didCancel) {
+        Alert.alert('You cancelled Image selection.');
+      } else if (response.error) {
+        Alert.alert('Error selecting Image:', response.error);
+      } else {
+        setImageUri(response.assets[0].uri);
+      }
+    } catch (error) {
+      Alert.alert('Error selecting Image:', error.message);
+    }
   };
 
   const handleUpload = async () => {
-    if (!name || !description || !notes || !videoUri) {
+    if (!name || !description || !notes || (!videoUri && !imageUri)) {
       Alert.alert('All fields are required.');
       return;
     }
 
-    // Upload video to Firebase Storage
-    const videoRef = storage().ref(`videos/${name}.mp4`);
-    await videoRef.putFile(videoUri);
+    try {
+      const dataToUpload = {
+        name,
+        description,
+        notes,
+      };
 
-    // Get the download URL
-    const downloadURL = await videoRef.getDownloadURL();
+      if (videoUri) {
+        // Upload video to Firebase Storage
+        const videoRef = storage().ref(`videos/${name}.mp4`);
+        await videoRef.putFile(videoUri);
 
-    // Upload metadata to Firestore
-    await firestore().collection('videos').add({
-      name,
-      description,
-      notes,
-      url: downloadURL,
-    });
+        // Get the download URL for the video
+        const videoDownloadURL = await videoRef.getDownloadURL();
 
-    Alert.alert('Video uploaded successfully!');
-    setName('');
-    setDescription('');
-    setNotes('');
-    setVideoUri('');
+        // Add video data to upload object
+        dataToUpload.type = 'video';
+        dataToUpload.videoUrl = videoDownloadURL;
+      }
 
-    console.log(up);
+      if (imageUri) {
+        // Upload image to Firebase Storage
+        const imageRef = storage().ref(`images/${name}.png`);
+        await imageRef.putFile(imageUri);
+
+        // Get the download URL for the image
+        const imageDownloadURL = await imageRef.getDownloadURL();
+
+        // Add image data to upload object
+        dataToUpload.type = 'image';
+        dataToUpload.imageUrl = imageDownloadURL;
+      }
+
+      // Upload metadata to Firestore for video or image
+      await firestore().collection('StorageData').add(dataToUpload);
+
+      Alert.alert('Data uploaded successfully!');
+      setName('');
+      setDescription('');
+      setNotes('');
+      setVideoUri('');
+      setImageUri('');
+    } catch (error) {
+      Alert.alert('Error uploading data:', error.message);
+    }
   };
+  const responsiveStyles = StyleSheet.create({
+    input: {
+      width: width * 0.8,
+    },
+    button: {
+      width: width * 0.1,
+    },
+    uploadButton: {
+      width: width * 0.24,
+    },
+  });
 
   return (
-    <View style={style.container}>
-      <View style={style.wrapper}>
-        <View style={style.form}>
-          <Text style={style.text}>Title of the Vidoe</Text>
-          <TextInput value={name} onChangeText={setName} style={style.input} />
-          <Text style={style.text}>Description of the video</Text>
-          <TextInput
-            value={description}
-            onChangeText={setDescription}
-            style={style.input}
-          />
-          <Text style={style.text}>Notes for the users</Text>
-          <TextInput
-            value={notes}
-            onChangeText={setNotes}
-            style={style.input}
-          />
-          <TouchableRipple style={[style.button]} onPress={handleVideoSelect}>
-            <Image
-              source={require('../../../../assets/images/plus.png')}
-              style={style.plusButton}
+    <ScrollView>
+      <View style={style.container}>
+        <View style={style.wrapper}>
+          <View style={style.form}>
+            <Text style={style.text}>Title</Text>
+            <TextInput
+              value={name}
+              onChangeText={setName}
+              style={[style.input, responsiveStyles.input]}
+              placeholder="Enter a title."
+              placeholderTextColor="#e1e1e1"
             />
-          </TouchableRipple>
-          {/* <Button title="Select Video" /> */}
-          {videoUri ? (
-            <Video
-              source={{uri: videoUri}}
-              resizeMode="contain"
-              style={{
-                width: width * 0.8,
-                height: height * 0.3,
-                // borderRadius: width * 0.4,
-              }}
+            <Text style={style.text}>Description</Text>
+            <TextInput
+              value={description}
+              onChangeText={setDescription}
+              style={[style.input, responsiveStyles.input]}
+              multiline
+              numberOfLines={4}
+              placeholder="Enter a description."
+              placeholderTextColor="#e1e1e1"
             />
-          ) : (
-            <Text style={style.text}>No video selected</Text>
-          )}
-          <TouchableRipple onPress={handleUpload} style={style.uploadButton}>
-            <Text style={style.uploadText}>Upload</Text>
-          </TouchableRipple>
-          {/* <Button title="Upload" onPress={handleUpload} /> */}
+            <Text style={style.text}>Notes</Text>
+            <TextInput
+              value={notes}
+              onChangeText={setNotes}
+              style={[style.input, responsiveStyles.input]}
+              multiline
+              numberOfLines={4}
+              placeholder="Enter notes for users."
+              placeholderTextColor="#e1e1e1"
+            />
+            <TouchableRipple
+              style={[style.button, responsiveStyles.button]}
+              onPress={handleVideoSelect}>
+              <Image
+                source={require('../../../../assets/images/plus.png')}
+                style={style.plusButton}
+              />
+            </TouchableRipple>
+            {videoUri ? (
+              <Video
+                source={{uri: videoUri}}
+                resizeMode="contain"
+                style={{
+                  width: width * 0.8,
+                  height: height * 0.3,
+                }}
+              />
+            ) : (
+              <Text style={style.text}>No video selected</Text>
+            )}
+            <TouchableRipple
+              style={[style.button, responsiveStyles.button]}
+              onPress={handleImageSelect}>
+              <Image
+                source={require('../../../../assets/images/plus.png')}
+                style={style.plusButton}
+              />
+            </TouchableRipple>
+            {imageUri ? (
+              <Image
+                source={{uri: imageUri}}
+                style={{
+                  width: width * 0.8,
+                  height: height * 0.3,
+                  borderRadius: width * 0.04,
+                }}
+              />
+            ) : (
+              <Text style={style.text}>No image selected</Text>
+            )}
+            <TouchableRipple onPress={handleUpload} style={style.uploadButton}>
+              <Text style={style.uploadText}>Upload</Text>
+            </TouchableRipple>
+          </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -122,19 +215,19 @@ export default Storage;
 
 const style = StyleSheet.create({
   container: {
-    // display: 'flex',
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginVertical: height * 0.023,
   },
   wrapper: {
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#724EB7',
     width: width * 0.9,
-    height: height * 0.7,
     borderRadius: width * 0.023,
+    paddingTop: height * 0.05,
+    paddingBottom: height * 0.05,
   },
   form: {
     width: width * 0.8,
@@ -143,6 +236,7 @@ const style = StyleSheet.create({
     borderBottomWidth: height * 0.001,
     borderBottomColor: '#FFF',
     marginBottom: height * 0.02,
+    color: '#FFF',
   },
   text: {
     fontSize: height * 0.02,
@@ -153,7 +247,6 @@ const style = StyleSheet.create({
     height: height * 0.054,
     backgroundColor: '#724EB7',
     width: width * 0.1,
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: width * 0.034,
@@ -167,7 +260,6 @@ const style = StyleSheet.create({
     height: height * 0.054,
     backgroundColor: '#FFF',
     borderRadius: width * 0.023,
-    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: height * 0.003,
@@ -175,7 +267,5 @@ const style = StyleSheet.create({
   uploadText: {
     color: '#242424',
     fontSize: height * 0.024,
-    // fontWeight: 'bold',
-    fontFamily: 'OpenSans-ExtraBold',
   },
 });

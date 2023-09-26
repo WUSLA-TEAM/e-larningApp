@@ -11,10 +11,11 @@ import {
 import {TouchableRipple} from 'react-native-paper';
 
 import {UserContext} from '../../Server/Firebase/Firestore/FirestoreService';
+import ElevatedCards from './Components/TopCards/ElevatedCards';
 
 const {width, height} = Dimensions.get('window');
 
-const Profile = () => {
+const Profile = ({navigation}) => {
   const userData = useContext(UserContext);
 
   // Check if userInfo is null before accessing its properties
@@ -29,21 +30,6 @@ const Profile = () => {
   }
   const [data, setData] = useState([]);
 
-  const getAPIData = async () => {
-    const URL = 'https://fakestoreapi.com/products';
-    try {
-      const response = await fetch(URL);
-      const result = await response.json();
-      setData(result);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
-  useEffect(() => {
-    getAPIData();
-  }, []);
-
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
@@ -54,26 +40,10 @@ const Profile = () => {
         <Text style={[styles.UserName, styles.h1Text]}>{userData.name}</Text>
       </View>
       <View style={styles.middleSection}>
-        {data.length ? (
-          <FlatList
-            data={data}
-            renderItem={({item}) => (
-              <TouchableRipple
-                style={styles.productItem}
-                onPress={() => {
-                  Alert.alert('hi');
-                }}>
-                <Text style={styles.productTitle}>{item.title}</Text>
-                {/* Add more data fields here */}
-              </TouchableRipple>
-            )}
-            keyExtractor={item => item.id.toString()}
-            horizontal={true}
-            style={styles.FlatListItem}
-          />
-        ) : (
-          <Text>Loading...</Text>
-        )}
+        <ElevatedCards style={styles.CardBox} />
+      </View>
+      <View style={styles.BottomSection}>
+        <Text style={styles.BottomText}>Wusla</Text>
       </View>
     </View>
   );
@@ -82,6 +52,7 @@ const Profile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFF',
   },
   h1Text: {
     fontFamily: Platform.OS === 'android' ? 'OpenSans-Bold' : 'SF-Pro',
@@ -94,11 +65,13 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   topSection: {
-    backgroundColor: '#724EB7',
+    backgroundColor: '#131D35',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: height * 0.31,
+    height: height * 0.51,
+    borderBottomLeftRadius: width * 0.23,
+    borderBottomRightRadius: width * 0.23,
   },
   imageOfUser: {
     backgroundColor: '#FFF',
@@ -112,9 +85,9 @@ const styles = StyleSheet.create({
   },
   middleSection: {
     flex: 1,
-    backgroundColor: '#fff', // Add background color for the product list
+    // backgroundColor: '#242424', // Add background color for the product list
     padding: 20,
-    height: height * 0.0021,
+    height: height * 0.9,
   },
   productItem: {
     borderBottomWidth: 1,
@@ -131,6 +104,9 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
   FlatListItem: {},
+  CardBox: {
+    backgroundColor: '#FFF',
+  },
 });
 
 export default Profile;
