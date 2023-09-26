@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -8,94 +8,60 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
+import {useNavigation} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
-class Class extends Component {
-  state = {
-    data: [
-      {
-        id: 1,
-        title: 'Image 1',
-        description: 'This is the description for image 1.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-      {
-        id: 2,
-        title: 'Image 2',
-        description: 'This is the description for image 2.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-      {
-        id: 3,
-        title: 'Image 3',
-        description: 'This is the description for image 3.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-      {
-        id: 4,
-        title: 'Image 4',
-        description: 'This is the description for image 4.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-      {
-        id: 5,
-        title: 'Image 5',
-        description: 'This is the description for image 5.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-      {
-        id: 6,
-        title: 'Image 6',
-        description: 'This is the description for image 5.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-      {
-        id: 7,
-        title: 'Image 7',
-        description: 'This is the description for image 5.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-      {
-        id: 8,
-        title: 'Image 8',
-        description: 'This is the description for image 5.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-    ],
-  };
+const Class = () => {
+  const [data, setData] = useState([]);
+  const navigation = useNavigation();
 
-  onItemPress = item => {
-    // Navigate to the 'Latest' screen with the selected image.
-    this.props.navigation.navigate('Latest', {
+  useEffect(() => {
+    const fetchDataFromFirestore = async () => {
+      try {
+        const querySnapshot = await firestore().collection('StorageData').get();
+        const data = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setData(data);
+      } catch (error) {
+        console.error('Error fetching data from Firestore:', error);
+      }
+    };
+
+    fetchDataFromFirestore();
+  }, []);
+
+  const onItemPress = item => {
+    navigation.navigate('Latest', {
       imageUrl: item.imageUrl,
       title: item.title,
       description: item.description,
     });
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <FlatList
-          data={this.state.data}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              style={styles.list}
-              onPress={() => this.onItemPress(item)}>
-              <Image source={{uri: item.imageUrl}} style={styles.image} />
-              <View style={styles.content}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.description}>{item.description}</Text>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
-      </View>
-    );
-  }
-}
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={data}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({item}) => (
+          <TouchableOpacity
+            style={styles.list}
+            onPress={() => onItemPress(item)}>
+            <Image source={{uri: item.imageUrl}} style={styles.image} />
+            <View style={styles.content}>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.description}>{item.description}</Text>
+            </View>
+          </TouchableOpacity>
+        )}
+      />
+    </View>
+  );
+};
 
 export default Class;
 
