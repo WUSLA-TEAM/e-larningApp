@@ -35,10 +35,12 @@ const Class = () => {
   }, []);
 
   const onItemPress = item => {
+    console.log(item.videoUrl);
     navigation.navigate('Latest', {
       imageUrl: item.imageUrl,
       title: item.title,
       description: item.description,
+      videoUri: item.videoUrl,
     });
   };
 

@@ -87,6 +87,8 @@ const Sign = ({navigation}) => {
             textContentType="password"
             value={password}
             onChangeText={setPassword}
+            selectTextOnFocus={true}
+            secureTextEntry={true}
           />
           <TouchableRipple
             style={styles.buttonContinue}

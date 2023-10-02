@@ -1,10 +1,13 @@
 import {ScrollView, StyleSheet, Text, View, Dimensions} from 'react-native';
 import React from 'react';
 import {TouchableRipple} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
-const ElevatedCards = ({navigation}) => {
+const ElevatedCards = () => {
+  const navigation = useNavigation();
+
   const handleChat = () => {
     navigation.navigate('Chat');
   };
@@ -15,8 +18,12 @@ const ElevatedCards = ({navigation}) => {
         style={[styles.card, {marginTop: 0}]}>
         <Text style={[styles.h1Text, styles.cardText]}>Text</Text>
       </TouchableRipple>
-      <TouchableRipple style={[styles.card]}>
-        <Text style={[styles.h1Text, styles.cardText]}>Text</Text>
+      <TouchableRipple
+        style={[styles.card]}
+        onPress={() => {
+          navigation.navigate('Storage');
+        }}>
+        <Text style={[styles.h1Text, styles.cardText]}>Storage</Text>
       </TouchableRipple>
       <TouchableRipple style={[styles.card]}>
         <Text style={[styles.h1Text, styles.cardText]}>Text</Text>
