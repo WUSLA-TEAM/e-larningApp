@@ -18,7 +18,8 @@ const FirestoreService = ({children}) => {
   useEffect(() => {
     // Get the current user object
     const user = auth().currentUser;
-
+    //user data
+    console.log(user);
     // Get the user id
     const userId = user.uid;
 
@@ -33,6 +34,7 @@ const FirestoreService = ({children}) => {
         setUserData(documentSnapshot.data());
       }
     });
+    console.log(user.uid);
   }, []);
 
   // Return a user context provider with the user data value
