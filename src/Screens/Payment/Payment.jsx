@@ -30,6 +30,7 @@ const Payment = ({route, navigation}) => {
             email: email,
             phoneNumber: `${code} ${phoneNumber}`,
             password: password,
+            role: 'user',
           });
 
         console.log('Document successfully written!');

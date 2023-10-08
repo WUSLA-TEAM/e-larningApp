@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
 
 //navigaetion
 import {NavigationContainer} from '@react-navigation/native';
@@ -17,14 +17,19 @@ import Latest from './Class/components/Latest';
 import Profile from './Profile/Profile';
 import Chat from './Massege/chat';
 import Razorpay from './Payment/Razorpay/Razorpay';
-import FirestoreService from '../Server/Firebase/Firestore/FirestoreService';
+import FirestoreService, {
+  UserContext,
+} from '../Server/Firebase/Firestore/FirestoreService';
 import Storage from './AdminScreens/Storage/Storage';
 import ElevatedCards from './Profile/Components/TopCards/ElevatedCards';
+import Admin from './AdminScreens/Admin';
 
 const Stack = createNativeStackNavigator();
 
 //bottom navigation
 const Bottom = createMaterialBottomTabNavigator();
+
+const {userRole} = useContext(UserContext);
 
 function BottomTab() {
   return (
@@ -33,6 +38,7 @@ function BottomTab() {
       <Bottom.Screen name="Class" component={Class} />
       <Bottom.Screen name="Profile" component={Profile} />
       <Bottom.Screen name="Chat" component={Chat} />
+      {userRole === 'admin' && <Bottom.Screen name="Admin" component={Admin} />}
     </Bottom.Navigator>
   );
 }
@@ -54,6 +60,7 @@ function StackTab() {
       <Stack.Screen name="Storage" component={Storage} />
       <Stack.Screen name="ElevatedCards" component={ElevatedCards} />
       <Stack.Screen name="Class" component={Class} />
+      <Stack.Screen name="Admin" component={Admin} />
     </Stack.Navigator>
   );
 }

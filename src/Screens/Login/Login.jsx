@@ -21,6 +21,7 @@ const Login = ({navigation}) => {
   const [code, setCode] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('');
 
   //modal
   const [modalVisible, setModalVisible] = useState(false);
@@ -51,6 +52,7 @@ const Login = ({navigation}) => {
       // Show an alert or error message indicating that all fields are required.
       Alert.alert('All fields are required');
     } else {
+      // Navigate to the Payment screen.
       navigation.navigate('Payment', {
         firstName,
         lastName,
