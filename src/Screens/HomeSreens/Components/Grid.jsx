@@ -57,12 +57,6 @@ export const Grid = () => {
         keyExtractor={keyExtractor}
         numColumns={numColumns}
       />
-      {/* Add a button or some UI element to change the number of columns */}
-      <TouchableHighlight
-        onPress={() => setNumColumns(3)} // Change the number of columns here
-        style={styles.changeColumnsButton}>
-        <Text>Change Columns</Text>
-      </TouchableHighlight>
     </View>
   );
 };

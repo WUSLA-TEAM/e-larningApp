@@ -1,10 +1,11 @@
 import {StyleSheet, Text, View, Dimensions, Image, Alert} from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {TextInput, TouchableRipple} from 'react-native-paper';
 
 //firebase auth
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
+import {UserContext} from '../../Server/Firebase/Firestore/FirestoreService';
 // import TermsModal from '../src/Privacy/TermsModal';
 
 const {width, height} = Dimensions.get('window');
@@ -14,6 +15,7 @@ const Sign = ({navigation}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [showPassword, setShowPassword] = useState(false);
+  const {userData, userRole} = useContext(UserContext);
 
   const hndleContinue = async () => {
     if ((email === '') | (password === '')) {
@@ -27,9 +29,7 @@ const Sign = ({navigation}) => {
       );
 
       if (userCredential && userCredential.user) {
-        const userUid = userCredential.user.email;
-
-        console.log(userUid);
+        const userUid = userCredential.user.uid;
 
         navigation.navigate('BottomTab');
       }

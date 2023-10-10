@@ -1,39 +1,42 @@
-import React, {createContext, useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
-// Import firestore and auth from '@react-native-firebase/firestore'
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  TouchableOpacity,
+} from 'react-native';
+import {UserContext} from '../contexts/UserContext';
 import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
-// Create a user context
-export const UserContext = createContext();
-// Define a function component for the user provider
-const FirestoreService = ({children}) => {
-  // Use state to store the user data
-  const [userData, setUserData] = useState({});
-  const [userRole, setUserRole] = useState({});
-  // Use effect to fetch the user data from Firestore
+const FirestoreService = () => {
+  const [userData, setUserData] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   useEffect(() => {
-    // Get the current user object
-    const user = auth().currentUser;
-    // Get the user id
-    const userId = user.uid;
-    // Get a reference to the user document by the user id
     const userDocument = firestore().collection('user').doc(userId);
-    // Get the document data
-    userDocument.get().then(documentSnapshot => {
-      // Check if the document exists
-      if (documentSnapshot.exists) {
-        // Set the user data state to the document data
-        setUserData(documentSnapshot.data());
-        setUserRole(documentSnapshot.data().role);
+    const fetchUserData = async () => {
+      try {
+        const documentSnapshot = await userDocument.get();
+        const userAdmin = {
+          userId: 'e74KTV9RBNXTW6HeNFp4gThKrcd2',
+          isAdmin: false,
+        };
+        if (userId === userAdmin.userId) {
+          setIsAdmin(true);
+        }
+        if (documentSnapshot.exists) {
+          const data = documentSnapshot.data();
+          setUserData(data);
+        }
+      } catch (error) {
+        console.error('error fetching user data:', error);
       }
-    });
+    };
+    fetchUserData();
   }, []);
-  // Return a user context provider with the user data value
   return (
-    <UserContext.Provider value={{userData, userRole}}>
+    <UserContext.Provider value={{userData, isAdmin}}>
       {children}
     </UserContext.Provider>
   );
 };
-// Export the user provider component
 export default FirestoreService;

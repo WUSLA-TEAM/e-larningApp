@@ -23,26 +23,28 @@ import FirestoreService, {
 import Storage from './AdminScreens/Storage/Storage';
 import ElevatedCards from './Profile/Components/TopCards/ElevatedCards';
 import Admin from './AdminScreens/Admin';
+import AdminForm from './Login/Components/AdminForm';
 
 const Stack = createNativeStackNavigator();
 
 //bottom navigation
 const Bottom = createMaterialBottomTabNavigator();
 
-const {userRole} = useContext(UserContext);
-
 function BottomTab() {
+  const {isAdmin} = useContext(UserContext);
+
+  // Check if userRole is available
+  console.log(`isAdmin: ${isAdmin}`);
   return (
     <Bottom.Navigator initialRouteName="Home">
       <Bottom.Screen name="Home" component={Home} />
       <Bottom.Screen name="Class" component={Class} />
       <Bottom.Screen name="Profile" component={Profile} />
       <Bottom.Screen name="Chat" component={Chat} />
-      {userRole === 'admin' && <Bottom.Screen name="Admin" component={Admin} />}
+      {isAdmin && <Bottom.Screen name="Admin" component={Admin} />}
     </Bottom.Navigator>
   );
 }
-
 function StackTab() {
   return (
     <Stack.Navigator
@@ -61,6 +63,7 @@ function StackTab() {
       <Stack.Screen name="ElevatedCards" component={ElevatedCards} />
       <Stack.Screen name="Class" component={Class} />
       <Stack.Screen name="Admin" component={Admin} />
+      <Stack.Screen name="AdminForm" component={AdminForm} />
     </Stack.Navigator>
   );
 }
