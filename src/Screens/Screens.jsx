@@ -33,9 +33,6 @@ function BottomTab() {
       <Bottom.Screen name="Class" component={Class} />
       <Bottom.Screen name="Profile" component={Profile} />
       <Bottom.Screen name="Chat" component={Chat} />
-      {userData.isAdmin ? (
-        <Bottom.Screen name="Admin" component={Admin} />
-      ) : null}
     </Bottom.Navigator>
   );
 }
