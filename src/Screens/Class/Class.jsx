@@ -1,103 +1,69 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
-  FlatList,
-  Image,
-  Text,
   View,
-  StyleSheet,
+  Text,
+  FlatList,
   TouchableOpacity,
+  Image,
+  StyleSheet,
   Dimensions,
 } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
 
 const {width, height} = Dimensions.get('window');
 
-class Class extends Component {
-  state = {
-    data: [
-      {
-        id: 1,
-        title: 'Image 1',
-        description: 'This is the description for image 1.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-      {
-        id: 2,
-        title: 'Image 2',
-        description: 'This is the description for image 2.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-      {
-        id: 3,
-        title: 'Image 3',
-        description: 'This is the description for image 3.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-      {
-        id: 4,
-        title: 'Image 4',
-        description: 'This is the description for image 4.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-      {
-        id: 5,
-        title: 'Image 5',
-        description: 'This is the description for image 5.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-      {
-        id: 6,
-        title: 'Image 6',
-        description: 'This is the description for image 5.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-      {
-        id: 7,
-        title: 'Image 7',
-        description: 'This is the description for image 5.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-      {
-        id: 8,
-        title: 'Image 8',
-        description: 'This is the description for image 5.',
-        imageUrl: 'https://picsum.photos/200/200',
-      },
-    ],
-  };
+const Class = ({navigation}) => {
+  const [data, setData] = useState([]);
 
-  onItemPress = item => {
+  useEffect(() => {
+    // Fetch the data from the Firestore StorageData collection.
+    const fetchStorageData = async () => {
+      try {
+        const storageDataCollection = firestore().collection('StorageData');
+        const snapshot = await storageDataCollection.get();
+
+        // Update the state with the fetched data.
+        const data = snapshot.docs.map(doc => doc.data());
+        setData(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchStorageData();
+  }, []);
+
+  const onItemPress = item => {
     // Navigate to the 'Latest' screen with the selected image.
-    this.props.navigation.navigate('Latest', {
+    navigation.navigate('Latest', {
       imageUrl: item.imageUrl,
       title: item.title,
       description: item.description,
+      videoUrl: item.videoUrl,
     });
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <FlatList
-          data={this.state.data}
-          keyExtractor={item => item.id.toString()}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              style={styles.list}
-              onPress={() => this.onItemPress(item)}>
-              <Image source={{uri: item.imageUrl}} style={styles.image} />
-              <View style={styles.content}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.description}>{item.description}</Text>
-              </View>
-            </TouchableOpacity>
-          )}
-        />
-      </View>
-    );
-  }
-}
-
-export default Class;
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={data}
+        keyExtractor={item => (item ? item.id : null)}
+        renderItem={({item, index}) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.list}
+            onPress={() => onItemPress(item)}>
+            <Image source={{uri: item.imageUrl}} style={styles.image} />
+            <View style={styles.content}>
+              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.description}>{item.description}</Text>
+            </View>
+          </TouchableOpacity>
+        )}
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -138,3 +104,5 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
 });
+
+export default Class;

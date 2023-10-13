@@ -1,41 +1,20 @@
 import React, {Component} from 'react';
-import {Image, Text, View, StyleSheet} from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
 import Video from 'react-native-video';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  image: {
-    width: '100%',
-    height: '50%',
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  description: {
-    fontSize: 16,
-    textAlign: 'center',
-  },
-});
 
 class Latest extends Component {
   render() {
     // Get the parameters from the route prop.
-    const {imageUrl, title, description} = this.props.route.params;
+    const {imageUrl, title, description, videoUrl} = this.props.route.params;
 
     return (
       <View style={styles.container}>
         <Video
-          source={require('../../../../assets/video/video1.mp4')} // Can be a URL or a local file.
+          source={{uri: videoUrl}} // Use the passed URL as the video source
           ref={ref => {
             this.player = ref;
           }} // Store reference
-          onBuffer={this.onBuffer} // Callback when remote video is buffering
-          onError={this.videoError} // Callback when video cannot be loaded
-          style={styles.image}
+          style={styles.video} // Adjusted style to take full height
           controls={true}
         />
         <View style={styles.content}>
@@ -48,3 +27,27 @@ class Latest extends Component {
 }
 
 export default Latest;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  video: {
+    flex: 1,
+    height: 200,
+    width: 200,
+    // Set video to take the full height of the container
+  },
+  content: {
+    padding: 16,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  description: {
+    fontSize: 16,
+    textAlign: 'center',
+  },
+});
