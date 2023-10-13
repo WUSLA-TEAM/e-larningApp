@@ -8,30 +8,32 @@ const FirestoreService = ({children}) => {
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const user = auth().currentUser;
+    // Add an event listener to track changes in the user's authentication state
+    const unsubscribe = auth().onAuthStateChanged(user => {
+      if (user) {
+        // User is authenticated, fetch user data from Firestore
+        const userId = user.uid;
+        const userDocument = firestore().collection('user').doc(userId);
 
-        if (user) {
-          const userId = user.uid;
-          const userDocument = firestore().collection('user').doc(userId);
-          const documentSnapshot = await userDocument.get();
-
+        userDocument.get().then(documentSnapshot => {
           if (documentSnapshot.exists) {
             const data = documentSnapshot.data();
             setUserData(data);
           } else {
             console.error('User document does not exist');
           }
-        } else {
-          console.error('User is not authenticated');
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error);
+        });
+      } else {
+        // User is not authenticated
+        console.error('User is not authenticated');
+        setUserData(null);
       }
-    };
+    });
 
-    fetchUserData();
+    return () => {
+      // Unsubscribe from the authentication state change event
+      unsubscribe();
+    };
   }, []);
 
   return (
