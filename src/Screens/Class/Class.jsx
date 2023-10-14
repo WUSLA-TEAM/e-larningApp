@@ -3,7 +3,6 @@ import {
   View,
   Text,
   FlatList,
-  TouchableOpacity,
   Image,
   StyleSheet,
   Dimensions,
@@ -16,14 +15,15 @@ const Class = ({navigation}) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // Fetch the data from the Firestore StorageData collection.
     const fetchStorageData = async () => {
       try {
         const storageDataCollection = firestore().collection('StorageData');
         const snapshot = await storageDataCollection.get();
 
-        // Update the state with the fetched data.
-        const data = snapshot.docs.map(doc => doc.data());
+        const data = snapshot.docs.map(doc => ({
+          id: doc.id, // Ensure each item has a unique key
+          ...doc.data(),
+        }));
         setData(data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -33,32 +33,19 @@ const Class = ({navigation}) => {
     fetchStorageData();
   }, []);
 
-  const onItemPress = item => {
-    // Navigate to the 'Latest' screen with the selected image.
-    navigation.navigate('Latest', {
-      imageUrl: item.imageUrl,
-      title: item.title,
-      description: item.description,
-      videoUrl: item.videoUrl,
-    });
-  };
-
   return (
     <View style={styles.container}>
       <FlatList
         data={data}
-        keyExtractor={item => (item ? item.id : null)}
-        renderItem={({item, index}) => (
-          <TouchableOpacity
-            key={index}
-            style={styles.list}
-            onPress={() => onItemPress(item)}>
+        keyExtractor={item => item.id} // Use the 'id' as the key
+        renderItem={({item}) => (
+          <View style={styles.list}>
             <Image source={{uri: item.imageUrl}} style={styles.image} />
             <View style={styles.content}>
               <Text style={styles.title}>{item.title}</Text>
               <Text style={styles.description}>{item.description}</Text>
             </View>
-          </TouchableOpacity>
+          </View>
         )}
       />
     </View>
