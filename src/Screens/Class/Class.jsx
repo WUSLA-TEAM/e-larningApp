@@ -6,6 +6,7 @@ import {
   Image,
   StyleSheet,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 
@@ -33,19 +34,30 @@ const Class = ({navigation}) => {
     fetchStorageData();
   }, []);
 
+  const navigateToLatestScreen = item => {
+    navigation.navigate('Latest', {
+      imageUrl: item.imageUrl,
+      title: item.title,
+      description: item.description,
+      videoUrl: item.videoUrl,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         data={data}
         keyExtractor={item => item.id} // Use the 'id' as the key
         renderItem={({item}) => (
-          <View style={styles.list}>
-            <Image source={{uri: item.imageUrl}} style={styles.image} />
-            <View style={styles.content}>
-              <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.description}>{item.description}</Text>
+          <TouchableOpacity onPress={() => navigateToLatestScreen(item)}>
+            <View style={styles.list}>
+              <Image source={{uri: item.imageUrl}} style={styles.image} />
+              <View style={styles.content}>
+                <Text style={styles.title}>{item.title}</Text>
+                <Text style={styles.description}>{item.description}</Text>
+              </View>
             </View>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>
@@ -60,7 +72,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   list: {
-    width: '100%',
+    width: width * 0.9,
     height: height * 0.17,
     display: 'flex',
     flexDirection: 'row',

@@ -27,22 +27,6 @@ const Profile = () => {
       </View>
     );
   }
-  const [data, setData] = useState([]);
-
-  const getAPIData = async () => {
-    const URL = 'https://fakestoreapi.com/products';
-    try {
-      const response = await fetch(URL);
-      const result = await response.json();
-      setData(result);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
-  useEffect(() => {
-    getAPIData();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -54,26 +38,30 @@ const Profile = () => {
         <Text style={[styles.UserName, styles.h1Text]}>{userData.name}</Text>
       </View>
       <View style={styles.middleSection}>
-        {data.length ? (
-          <FlatList
-            data={data}
-            renderItem={({item}) => (
-              <TouchableRipple
-                style={styles.productItem}
-                onPress={() => {
-                  Alert.alert('hi');
-                }}>
-                <Text style={styles.productTitle}>{item.title}</Text>
-                {/* Add more data fields here */}
-              </TouchableRipple>
-            )}
-            keyExtractor={item => item.id.toString()}
-            horizontal={true}
-            style={styles.FlatListItem}
-          />
-        ) : (
-          <Text>Loading...</Text>
-        )}
+        <TouchableRipple
+          onPress={() => console.log('Pressed')}
+          rippleColor="rgba(0, 0, 0, .32)"
+          style={[styles.box]}>
+          <Text>Account</Text>
+        </TouchableRipple>
+        <TouchableRipple
+          onPress={() => console.log('Pressed')}
+          rippleColor="rgba(0, 0, 0, .32)"
+          style={[styles.box]}>
+          <Text>Press anywhere</Text>
+        </TouchableRipple>
+        <TouchableRipple
+          onPress={() => console.log('Pressed')}
+          rippleColor="rgba(0, 0, 0, .32)"
+          style={[styles.box]}>
+          <Text>Press anywhere</Text>
+        </TouchableRipple>
+        <TouchableRipple
+          onPress={() => console.log('Pressed')}
+          rippleColor="rgba(0, 0, 0, .32)"
+          style={[styles.box]}>
+          <Text>Press anywhere</Text>
+        </TouchableRipple>
       </View>
     </View>
   );
@@ -82,6 +70,7 @@ const Profile = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    color: '#fff',
   },
   h1Text: {
     fontFamily: Platform.OS === 'android' ? 'OpenSans-Bold' : 'SF-Pro',
@@ -94,11 +83,13 @@ const styles = StyleSheet.create({
     fontWeight: '400',
   },
   topSection: {
-    backgroundColor: '#724EB7',
+    backgroundColor: '#131D35',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: height * 0.31,
+    height: height * 0.3,
+    borderBottomLeftRadius: height * 0.098,
+    borderBottomRightRadius: height * 0.098,
   },
   imageOfUser: {
     backgroundColor: '#FFF',
@@ -131,6 +122,16 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
   FlatListItem: {},
+  box: {
+    backgroundColor: '#724EB7',
+    height: height * 0.074,
+    display: 'flex',
+    justifyContent: 'center',
+    // alignItems: 'center',
+    padding: height * 0.015,
+    marginTop: height * 0.015,
+    borderRadius: width * 0.024,
+  },
 });
 
 export default Profile;
