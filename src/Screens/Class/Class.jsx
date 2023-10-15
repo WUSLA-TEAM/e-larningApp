@@ -1,68 +1,81 @@
 import React, {useEffect, useState} from 'react';
 import {
-  View,
-  Text,
   FlatList,
   Image,
+  Text,
+  View,
   StyleSheet,
-  Dimensions,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import {useNavigation} from '@react-navigation/native';
+import {ActivityIndicator} from 'react-native-paper';
 
 const {width, height} = Dimensions.get('window');
 
-const Class = ({navigation}) => {
+const Class = () => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true); // add a loading state
+  const navigation = useNavigation();
 
   useEffect(() => {
-    const fetchStorageData = async () => {
+    const fetchDataFromFirestore = async () => {
       try {
-        const storageDataCollection = firestore().collection('StorageData');
-        const snapshot = await storageDataCollection.get();
-
-        const data = snapshot.docs.map(doc => ({
-          id: doc.id, // Ensure each item has a unique key
+        const querySnapshot = await firestore().collection('StorageData').get();
+        const data = querySnapshot.docs.map(doc => ({
+          id: doc.id,
           ...doc.data(),
         }));
         setData(data);
+        setLoading(false); // set loading to false when data is ready
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching data from Firestore:', error);
       }
     };
 
-    fetchStorageData();
+    fetchDataFromFirestore();
   }, []);
 
-  const navigateToLatestScreen = item => {
+  const onItemPress = item => {
+    console.log(`Image Url : ${item.imageUrl}`);
+    console.log(`Video Url : ${item.videoUrl}`);
     navigation.navigate('Latest', {
       imageUrl: item.imageUrl,
-      title: item.title,
+      name: item.name,
       description: item.description,
       videoUrl: item.videoUrl,
+      notes: item.notes,
     });
   };
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={data}
-        keyExtractor={item => item.id} // Use the 'id' as the key
-        renderItem={({item}) => (
-          <TouchableOpacity onPress={() => navigateToLatestScreen(item)}>
-            <View style={styles.list}>
+      {loading ? ( // show a loading indicator if loading is true
+        <ActivityIndicator size="medium" color="#8352DE" />
+      ) : (
+        // render the FlatList component if loading is false
+        <FlatList
+          data={data}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              style={styles.list}
+              onPress={() => onItemPress(item)}>
               <Image source={{uri: item.imageUrl}} style={styles.image} />
               <View style={styles.content}>
-                <Text style={styles.title}>{item.title}</Text>
+                <Text style={styles.title}>{item.name}</Text>
                 <Text style={styles.description}>{item.description}</Text>
               </View>
-            </View>
-          </TouchableOpacity>
-        )}
-      />
+            </TouchableOpacity>
+          )}
+        />
+      )}
     </View>
   );
 };
+
+export default Class;
 
 const styles = StyleSheet.create({
   container: {
@@ -72,7 +85,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   list: {
-    width: width * 0.9,
+    width: width * 0.8,
     height: height * 0.17,
     display: 'flex',
     flexDirection: 'row',
@@ -91,17 +104,14 @@ const styles = StyleSheet.create({
     marginLeft: width * 0.021,
   },
   title: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: height * 0.03,
     color: '#FFF',
-    fontFamily: 'OpenSans-Medium',
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-ExtraBold',
   },
   description: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#FFF',
     fontWeight: '400',
+    fontFamily: 'OpenSans-Medium',
   },
 });
-
-export default Class;
