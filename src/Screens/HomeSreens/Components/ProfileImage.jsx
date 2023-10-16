@@ -1,152 +1,166 @@
-import React, {useState, useContext} from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Alert,
-  StyleSheet,
-  Dimensions,
-  Image,
-  ScrollView,
-} from 'react-native';
-import {launchImageLibrary} from 'react-native-image-picker';
+// Import the necessary modules
+import React, {useState, useEffect} from 'react';
+import {View, StyleSheet} from 'react-native';
+import {Button, Avatar} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
+import ImagePicker from 'react-native-image-picker';
+import auth from '@react-native-firebase/auth';
 import storage from '@react-native-firebase/storage';
 import firestore from '@react-native-firebase/firestore';
-import Video from 'react-native-video';
-import {TouchableRipple} from 'react-native-paper';
-import {UserContext} from '../../../Server/Firebase/Firestore/FirestoreService';
 
-const {width, height} = Dimensions.get('window');
+// Define some constants
+const options = {
+  title: 'Select Image',
+  storageOptions: {
+    skipBackup: true,
+    path: 'images',
+  },
+};
 
+const defaultImage =
+  'https://firebasestorage.googleapis.com/v0/b/react-native-firebase-9ad26.appspot.com/o/default.png?alt=media&token=8a28e1f8-556f-4d41-8b04-8d38f9dfecf9';
+
+// Define the main component
 const ProfileImage = () => {
-  const userData = useContext(UserContext); // Use UserContext as an argument
+  // Define the state variables
+  const [imageUri, setImageUri] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const [imageUrl, setimageUrl] = useState('');
-  const dataToUpload = {};
+  // Get the navigation prop
+  const navigation = useNavigation();
 
-  const handleImageSelect = async () => {
-    const options = {
-      mediaType: 'photo',
-    };
+  // Get the current user from Firebase Authentication
+  const user = auth().currentUser;
 
+  // Define a function to get the user image from Firebase Storage
+  const getUserImage = async () => {
     try {
-      const response = await launchImageLibrary(options);
+      // Get the image URL from Firebase Storage
+      const url = await storage().ref(`images/${user.uid}`).getDownloadURL();
+      // Set the image URI state
+      setImageUri(url);
+    } catch (error) {
+      // Handle any errors
+      console.log(error);
+      // Set the image URI state to the default image
+      setImageUri(defaultImage);
+    }
+  };
 
-      if (response.didCancel) {
-        Alert.alert('You cancelled Image selection.');
-      } else if (response.error) {
-        Alert.alert('Error selecting Image:', response.error);
+  // Define a function to select an image from the device gallery or camera
+  const selectImage = () => {
+    // Launch the image picker
+    ImagePicker.showImagePicker(options, response => {
+      // Handle any errors or cancellations
+      if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.didCancel) {
+        console.log('User cancelled image picker');
       } else {
-        setimageUrl(response.assets[0].uri);
+        // Get the image URI from the response
+        const uri = response.uri;
+        // Set the image URI state
+        setImageUri(uri);
       }
-    } catch (error) {
-      Alert.alert('Error selecting Image:', error.message);
-    }
+    });
   };
 
-  const handleUpload = async () => {
-    if (!imageUrl) {
-      Alert.alert('Please select an image first.');
-      return;
-    }
-
+  // Define a function to upload an image to Firebase Storage
+  const uploadImage = async () => {
     try {
-      // Upload image to Firebase Storage
-      const imageRef = storage().ref(`users/${userData.email}`);
-      await imageRef.putFile(imageUrl);
-
-      // Get the download URL for the image
-      const imageDownloadURL = await imageRef.getDownloadURL();
-
-      // Set the updated imageUrl in the Firestore document
-      await firestore().collection('user').doc(userData.email).update({
-        imageUrl: imageDownloadURL,
-      });
-
-      Alert.alert('Image uploaded successfully!');
-      setimageUrl(imageDownloadURL); // Update the local state with the new image URL
+      // Set the loading state to true
+      setLoading(true);
+      // Create a reference to the image in Firebase Storage
+      const ref = storage().ref(`images/${user.uid}`);
+      // Convert the image URI to a blob
+      const blob = await uriToBlob(imageUri);
+      // Upload the blob to Firebase Storage
+      await ref.put(blob);
+      // Set the loading state to false
+      setLoading(false);
+      // Navigate back to the previous screen
+      navigation.goBack();
     } catch (error) {
-      Alert.alert('Error uploading image:', error.message);
+      // Handle any errors
+      console.log(error);
+      // Set the loading state to false
+      setLoading(false);
     }
   };
 
+  // Define a function to update the user image in Firebase Firestore
+  const updateUserImage = async () => {
+    try {
+      // Get the image URL from Firebase Storage
+      const url = await storage().ref(`images/${user.uid}`).getDownloadURL();
+      // Update the user image in Firebase Firestore
+      await firestore().collection('users').doc(user.uid).update({
+        image: url,
+      });
+    } catch (error) {
+      // Handle any errors
+      console.log(error);
+    }
+  };
+
+  // Define a function to convert a URI to a blob
+  const uriToBlob = uri => {
+    return new Promise((resolve, reject) => {
+      // Create a new XMLHttpRequest object
+      const xhr = new XMLHttpRequest();
+      // Open the request with the URI
+      xhr.open('GET', uri, true);
+      // Set the response type to blob
+      xhr.responseType = 'blob';
+      // Define the onload event handler
+      xhr.onload = () => {
+        // Check if the status is 200
+        if (xhr.status === 200) {
+          // Resolve the promise with the response blob
+          resolve(xhr.response);
+        } else {
+          // Reject the promise with the status text
+          reject(xhr.statusText);
+        }
+      };
+      // Define the onerror event handler
+      xhr.onerror = () => {
+        // Reject the promise with the error
+        reject(new Error('URI to Blob failed'));
+      };
+      // Send the request
+      xhr.send();
+    });
+  };
+
+  // Use the useEffect hook to get the user image when the component mounts
+  useEffect(() => {
+    getUserImage();
+  }, []);
+
+  // Return the UI elements
   return (
-    <ScrollView>
-      <View style={style.container}>
-        <View style={style.wrapper}>
-          <TouchableRipple style={style.button} onPress={handleImageSelect}>
-            <Image
-              source={require('../../../../assets/images/plus.png')}
-              style={style.plusButton}
-            />
-          </TouchableRipple>
-          {imageUrl ? (
-            <Image
-              source={{uri: imageUrl}}
-              style={{
-                width: width * 0.8,
-                height: height * 0.3,
-                borderRadius: width * 0.04,
-              }}
-            />
-          ) : (
-            <Text style={style.text}>No image selected</Text>
-          )}
-          <TouchableRipple onPress={handleUpload} style={style.uploadButton}>
-            <Text style={style.uploadText}>Upload</Text>
-          </TouchableRipple>
-        </View>
-      </View>
-    </ScrollView>
+    <View style={styles.container}>
+      <Avatar.Image size={200} source={{uri: imageUri}} />
+      <Button mode="contained" onPress={selectImage}>
+        Select Image
+      </Button>
+      <Button mode="contained" onPress={uploadImage} loading={loading}>
+        Update Image
+      </Button>
+    </View>
   );
 };
 
-export default ProfileImage;
-
-const style = StyleSheet.create({
+// Define the styles
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginVertical: height * 0.023,
-  },
-  wrapper: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#724EB7',
-    width: width * 0.9,
-    borderRadius: width * 0.023,
-    paddingTop: height * 0.05,
-    paddingBottom: height * 0.05,
-  },
-  text: {
-    fontSize: height * 0.02,
-    fontWeight: 'bold',
-    color: '#FFF',
-  },
-  button: {
-    height: height * 0.054,
-    backgroundColor: '#724EB7',
-    width: width * 0.1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: width * 0.034,
-  },
-  plusButton: {
-    height: height * 0.04,
-    width: width * 0.065,
-  },
-  uploadButton: {
-    width: width * 0.24,
-    height: height * 0.054,
-    backgroundColor: '#FFF',
-    borderRadius: width * 0.023,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: height * 0.003,
-  },
-  uploadText: {
-    color: '#242424',
-    fontSize: height * 0.024,
+    backgroundColor: '#fff',
   },
 });
+
+// Export the component
+export default ProfileImage;

@@ -20,6 +20,9 @@ import Admin from './AdminScreens/Admin';
 import FirestoreService, {
   UserContext,
 } from '../Server/Firebase/Firestore/FirestoreService';
+import ProfileImage from './HomeSreens/Components/ProfileImage';
+import Account from './Profile/Components/Account/Account';
+import Privacy from './Profile/Components/Privacy/Privacy';
 
 const Stack = createNativeStackNavigator();
 const Bottom = createMaterialBottomTabNavigator();
@@ -52,6 +55,9 @@ function StackTab() {
       <Stack.Screen name="Razorpay" component={Razorpay} />
       <Stack.Screen name="FirestoreService" component={FirestoreService} />
       <Stack.Screen name="Storage" component={Storage} />
+      <Stack.Screen name="ProfileImage" component={ProfileImage} />
+      <Stack.Screen name="Account" component={Account} />
+      <Stack.Screen name="Privacy" component={Privacy} />
     </Stack.Navigator>
   );
 }

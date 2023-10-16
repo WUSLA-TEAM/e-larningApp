@@ -11,11 +11,13 @@ import {
 import {TouchableRipple} from 'react-native-paper';
 
 import {UserContext} from '../../Server/Firebase/Firestore/FirestoreService';
+import {useNavigation} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
 const Profile = () => {
   const userData = useContext(UserContext);
+  const navigation = useNavigation();
 
   // Check if userInfo is null before accessing its properties
   if (!userData) {
@@ -27,28 +29,30 @@ const Profile = () => {
       </View>
     );
   }
-
+  const handleChageProfile = () => {
+    navigation.navigate('ProfileImage');
+  };
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
-        <Image
-          source={require('../../../assets/images/logo.png')}
-          style={styles.imageOfUser}
-        />
+        <TouchableRipple onPress={handleChageProfile}>
+          <Image source={{uri: userData.imageUrl}} style={styles.imageOfUser} />
+        </TouchableRipple>
+
         <Text style={[styles.UserName, styles.h1Text]}>{userData.name}</Text>
       </View>
       <View style={styles.middleSection}>
         <TouchableRipple
-          onPress={() => console.log('Pressed')}
+          onPress={() => navigation.navigate('Account')}
           rippleColor="rgba(0, 0, 0, .32)"
           style={[styles.box]}>
-          <Text>Account</Text>
+          <Text>Account Info</Text>
         </TouchableRipple>
         <TouchableRipple
-          onPress={() => console.log('Pressed')}
+          onPress={() => navigation.navigate('Privacy')}
           rippleColor="rgba(0, 0, 0, .32)"
           style={[styles.box]}>
-          <Text>Press anywhere</Text>
+          <Text>Privacy Policy</Text>
         </TouchableRipple>
         <TouchableRipple
           onPress={() => console.log('Pressed')}
