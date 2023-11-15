@@ -10,11 +10,19 @@ import {
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {useNavigation} from '@react-navigation/native';
+<<<<<<< HEAD
+=======
+import {ActivityIndicator} from 'react-native-paper';
+>>>>>>> check
 
 const {width, height} = Dimensions.get('window');
 
 const Class = () => {
   const [data, setData] = useState([]);
+<<<<<<< HEAD
+=======
+  const [loading, setLoading] = useState(true); // add a loading state
+>>>>>>> check
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -26,6 +34,10 @@ const Class = () => {
           ...doc.data(),
         }));
         setData(data);
+<<<<<<< HEAD
+=======
+        setLoading(false); // set loading to false when data is ready
+>>>>>>> check
       } catch (error) {
         console.error('Error fetching data from Firestore:', error);
       }
@@ -35,17 +47,31 @@ const Class = () => {
   }, []);
 
   const onItemPress = item => {
+<<<<<<< HEAD
     console.log(item.videoUrl);
+=======
+<<<<<<< HEAD
+=======
+    console.log(`Image Url : ${item.imageUrl}`);
+    console.log(`Video Url : ${item.videoUrl}`);
+>>>>>>> check
+>>>>>>> main
     navigation.navigate('Latest', {
       imageUrl: item.imageUrl,
-      title: item.title,
+      name: item.name,
       description: item.description,
+<<<<<<< HEAD
       videoUri: item.videoUrl,
+=======
+      videoUrl: item.videoUrl,
+      notes: item.notes,
+>>>>>>> main
     });
   };
 
   return (
     <View style={styles.container}>
+<<<<<<< HEAD
       <FlatList
         data={data}
         keyExtractor={item => item.id.toString()}
@@ -61,6 +87,28 @@ const Class = () => {
           </TouchableOpacity>
         )}
       />
+=======
+      {loading ? ( // show a loading indicator if loading is true
+        <ActivityIndicator size="medium" color="#8352DE" />
+      ) : (
+        // render the FlatList component if loading is false
+        <FlatList
+          data={data}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              style={styles.list}
+              onPress={() => onItemPress(item)}>
+              <Image source={{uri: item.imageUrl}} style={styles.image} />
+              <View style={styles.content}>
+                <Text style={styles.title}>{item.name}</Text>
+                <Text style={styles.description}>{item.description}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
+      )}
+>>>>>>> check
     </View>
   );
 };
@@ -75,7 +123,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   list: {
-    width: '100%',
+    width: width * 0.8,
     height: height * 0.17,
     display: 'flex',
     flexDirection: 'row',
@@ -94,15 +142,14 @@ const styles = StyleSheet.create({
     marginLeft: width * 0.021,
   },
   title: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: height * 0.03,
     color: '#FFF',
-    fontFamily: 'OpenSans-Medium',
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-ExtraBold',
   },
   description: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#FFF',
     fontWeight: '400',
+    fontFamily: 'OpenSans-Medium',
   },
 });

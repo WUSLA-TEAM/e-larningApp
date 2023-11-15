@@ -78,6 +78,8 @@ const Sign = ({navigation}) => {
             mode="outline"
             value={email}
             onChangeText={setEmail}
+            selectTextOnFocus={true}
+
           />
           <TextInput
             // value="Arsh"
@@ -87,8 +89,16 @@ const Sign = ({navigation}) => {
             textContentType="password"
             value={password}
             onChangeText={setPassword}
+<<<<<<< HEAD
             selectTextOnFocus={true}
             secureTextEntry={true}
+=======
+            secureTextEntry={true}
+<<<<<<< HEAD
+            selectTextOnFocus={true}
+=======
+>>>>>>> check
+>>>>>>> main
           />
           <TouchableRipple
             style={styles.buttonContinue}
@@ -242,6 +252,7 @@ const styles = StyleSheet.create({
   googleText: {
     fontSize: height * 0.018,
     marginLeft: width * 0.021,
+    color: '#242424',
   },
   //facebook
   facebookButton: {
@@ -254,6 +265,7 @@ const styles = StyleSheet.create({
   facebookText: {
     fontSize: height * 0.018,
     marginLeft: width * 0.021,
+    color: '#242424',
   },
   Terms: {
     display: 'flex',
