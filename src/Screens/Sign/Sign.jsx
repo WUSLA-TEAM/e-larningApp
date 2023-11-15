@@ -78,6 +78,8 @@ const Sign = ({navigation}) => {
             mode="outline"
             value={email}
             onChangeText={setEmail}
+            selectTextOnFocus={true}
+
           />
           <TextInput
             // value="Arsh"
@@ -87,6 +89,8 @@ const Sign = ({navigation}) => {
             textContentType="password"
             value={password}
             onChangeText={setPassword}
+            secureTextEntry={true}
+            selectTextOnFocus={true}
           />
           <TouchableRipple
             style={styles.buttonContinue}

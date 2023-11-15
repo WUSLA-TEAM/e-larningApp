@@ -35,7 +35,7 @@ const Start = ({navigation}) => {
       </View>
       <View style={styles.buttonArea}>
         <TouchableOpacity style={styles.login} onPress={handleLogin}>
-          <Text style={[styles.h1text, styles.loginButton]}>Login</Text>
+          <Text style={[styles.h1text, styles.loginButton]}>Register</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.sign} onPress={handleSign}>
           <Text style={[styles.h1text, styles.signButton]}>Sign up</Text>
