@@ -105,6 +105,7 @@ const Login = ({navigation}) => {
             mode="outline"
             onChangeText={setEmail}
             value={email}
+            keyboardType="email-address"
           />
           <View style={styles.Number}>
             <TextInput
@@ -116,6 +117,7 @@ const Login = ({navigation}) => {
               mode="outline"
               onChangeText={setCode}
               value={code}
+              keyboardType="numeric"
             />
             <TextInput
               // value="Arsh"
@@ -126,6 +128,7 @@ const Login = ({navigation}) => {
               mode="outline"
               onChangeText={setPhoneNumber}
               value={phoneNumber}
+              keyboardType="numeric"
             />
           </View>
           <TextInput

@@ -11,12 +11,17 @@ import {
 import {TouchableRipple} from 'react-native-paper';
 
 import {UserContext} from '../../Server/Firebase/Firestore/FirestoreService';
+<<<<<<< HEAD
 import ElevatedCards from './Components/TopCards/ElevatedCards';
+=======
+import {useNavigation} from '@react-navigation/native';
+>>>>>>> check
 
 const {width, height} = Dimensions.get('window');
 
 const Profile = ({navigation}) => {
   const userData = useContext(UserContext);
+  const navigation = useNavigation();
 
   // Check if userInfo is null before accessing its properties
   if (!userData) {
@@ -28,22 +33,55 @@ const Profile = ({navigation}) => {
       </View>
     );
   }
+<<<<<<< HEAD
   const [data, setData] = useState([]);
 
+=======
+  const handleChageProfile = () => {
+    navigation.navigate('ProfileImage');
+  };
+>>>>>>> check
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
-        <Image
-          source={require('../../../assets/images/logo.png')}
-          style={styles.imageOfUser}
-        />
+        <TouchableRipple onPress={handleChageProfile}>
+          <Image source={{uri: userData.imageUrl}} style={styles.imageOfUser} />
+        </TouchableRipple>
+
         <Text style={[styles.UserName, styles.h1Text]}>{userData.name}</Text>
       </View>
       <View style={styles.middleSection}>
+<<<<<<< HEAD
         <ElevatedCards style={styles.CardBox} />
       </View>
       <View style={styles.BottomSection}>
         <Text style={styles.BottomText}>Wusla</Text>
+=======
+        <TouchableRipple
+          onPress={() => navigation.navigate('Account')}
+          rippleColor="rgba(0, 0, 0, .32)"
+          style={[styles.box]}>
+          <Text>Account Info</Text>
+        </TouchableRipple>
+        <TouchableRipple
+          onPress={() => navigation.navigate('Privacy')}
+          rippleColor="rgba(0, 0, 0, .32)"
+          style={[styles.box]}>
+          <Text>Privacy Policy</Text>
+        </TouchableRipple>
+        <TouchableRipple
+          onPress={() => console.log('Pressed')}
+          rippleColor="rgba(0, 0, 0, .32)"
+          style={[styles.box]}>
+          <Text>Press anywhere</Text>
+        </TouchableRipple>
+        <TouchableRipple
+          onPress={() => console.log('Pressed')}
+          rippleColor="rgba(0, 0, 0, .32)"
+          style={[styles.box]}>
+          <Text>Press anywhere</Text>
+        </TouchableRipple>
+>>>>>>> check
       </View>
     </View>
   );
@@ -52,7 +90,11 @@ const Profile = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+<<<<<<< HEAD
     backgroundColor: '#FFF',
+=======
+    color: '#fff',
+>>>>>>> check
   },
   h1Text: {
     fontFamily: Platform.OS === 'android' ? 'OpenSans-Bold' : 'SF-Pro',
@@ -69,9 +111,15 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+<<<<<<< HEAD
     height: height * 0.51,
     borderBottomLeftRadius: width * 0.23,
     borderBottomRightRadius: width * 0.23,
+=======
+    height: height * 0.3,
+    borderBottomLeftRadius: height * 0.098,
+    borderBottomRightRadius: height * 0.098,
+>>>>>>> check
   },
   imageOfUser: {
     backgroundColor: '#FFF',
@@ -104,8 +152,20 @@ const styles = StyleSheet.create({
     color: '#FFF',
   },
   FlatListItem: {},
+<<<<<<< HEAD
   CardBox: {
     backgroundColor: '#FFF',
+=======
+  box: {
+    backgroundColor: '#724EB7',
+    height: height * 0.074,
+    display: 'flex',
+    justifyContent: 'center',
+    // alignItems: 'center',
+    padding: height * 0.015,
+    marginTop: height * 0.015,
+    borderRadius: width * 0.024,
+>>>>>>> check
   },
 });
 

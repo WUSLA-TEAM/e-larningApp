@@ -1,7 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
-
-//navigaetion
+import React, {useContext} from 'react'; // Make sure to import useContext here
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
@@ -17,16 +14,26 @@ import Latest from './Class/components/Latest';
 import Profile from './Profile/Profile';
 import Chat from './Massege/chat';
 import Razorpay from './Payment/Razorpay/Razorpay';
-import FirestoreService from '../Server/Firebase/Firestore/FirestoreService';
 import Storage from './AdminScreens/Storage/Storage';
+<<<<<<< HEAD
 import ElevatedCards from './Profile/Components/TopCards/ElevatedCards';
+=======
+import Admin from './AdminScreens/Admin';
+
+import FirestoreService, {
+  UserContext,
+} from '../Server/Firebase/Firestore/FirestoreService';
+import ProfileImage from './HomeSreens/Components/ProfileImage';
+import Account from './Profile/Components/Account/Account';
+import Privacy from './Profile/Components/Privacy/Privacy';
+>>>>>>> check
 
 const Stack = createNativeStackNavigator();
-
-//bottom navigation
 const Bottom = createMaterialBottomTabNavigator();
 
 function BottomTab() {
+  const userData = useContext(UserContext);
+
   return (
     <Bottom.Navigator initialRouteName="Home">
       <Bottom.Screen name="Home" component={Home} />
@@ -52,8 +59,14 @@ function StackTab() {
       <Stack.Screen name="Razorpay" component={Razorpay} />
       <Stack.Screen name="FirestoreService" component={FirestoreService} />
       <Stack.Screen name="Storage" component={Storage} />
+<<<<<<< HEAD
       <Stack.Screen name="ElevatedCards" component={ElevatedCards} />
       <Stack.Screen name="Class" component={Class} />
+=======
+      <Stack.Screen name="ProfileImage" component={ProfileImage} />
+      <Stack.Screen name="Account" component={Account} />
+      <Stack.Screen name="Privacy" component={Privacy} />
+>>>>>>> check
     </Stack.Navigator>
   );
 }
