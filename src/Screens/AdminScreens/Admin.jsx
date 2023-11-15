@@ -4,11 +4,7 @@ import React from 'react';
 const Admin = () => {
   return (
     <View>
-<<<<<<< HEAD
       <Text>Admin is you now</Text>
-=======
-      <Text>Admin</Text>
->>>>>>> main
     </View>
   );
 };

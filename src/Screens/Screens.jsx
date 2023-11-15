@@ -1,11 +1,7 @@
-<<<<<<< HEAD
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useContext} from 'react';
 
 //navigaetion
-=======
-import React, {useContext} from 'react'; // Make sure to import useContext here
->>>>>>> main
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
@@ -21,44 +17,27 @@ import Latest from './Class/components/Latest';
 import Profile from './Profile/Profile';
 import Chat from './Massege/chat';
 import Razorpay from './Payment/Razorpay/Razorpay';
-<<<<<<< HEAD
 import FirestoreService, {
   UserContext,
 } from '../Server/Firebase/Firestore/FirestoreService';
-=======
->>>>>>> main
 import Storage from './AdminScreens/Storage/Storage';
-<<<<<<< HEAD
 import ElevatedCards from './Profile/Components/TopCards/ElevatedCards';
-<<<<<<< HEAD
 import Admin from './AdminScreens/Admin';
 import AdminForm from './Login/Components/AdminForm';
-=======
-=======
-import Admin from './AdminScreens/Admin';
-
-import FirestoreService, {
-  UserContext,
-} from '../Server/Firebase/Firestore/FirestoreService';
 import ProfileImage from './HomeSreens/Components/ProfileImage';
 import Account from './Profile/Components/Account/Account';
 import Privacy from './Profile/Components/Privacy/Privacy';
->>>>>>> check
->>>>>>> main
 
 const Stack = createNativeStackNavigator();
 const Bottom = createMaterialBottomTabNavigator();
 
 function BottomTab() {
-<<<<<<< HEAD
   const {isAdmin} = useContext(UserContext);
 
   // Check if userRole is available
   console.log(`isAdmin: ${isAdmin}`);
-=======
   const userData = useContext(UserContext);
 
->>>>>>> main
   return (
     <Bottom.Navigator initialRouteName="Home">
       <Bottom.Screen name="Home" component={Home} />
@@ -84,19 +63,13 @@ function StackTab() {
       <Stack.Screen name="Razorpay" component={Razorpay} />
       <Stack.Screen name="FirestoreService" component={FirestoreService} />
       <Stack.Screen name="Storage" component={Storage} />
-<<<<<<< HEAD
       <Stack.Screen name="ElevatedCards" component={ElevatedCards} />
       <Stack.Screen name="Class" component={Class} />
-<<<<<<< HEAD
       <Stack.Screen name="Admin" component={Admin} />
       <Stack.Screen name="AdminForm" component={AdminForm} />
-=======
-=======
       <Stack.Screen name="ProfileImage" component={ProfileImage} />
       <Stack.Screen name="Account" component={Account} />
       <Stack.Screen name="Privacy" component={Privacy} />
->>>>>>> check
->>>>>>> main
     </Stack.Navigator>
   );
 }

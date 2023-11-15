@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, {useState, useRef} from 'react';
 import {
   View,
@@ -8,12 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Text} from 'react-native-paper';
-=======
-<<<<<<< HEAD
-// Latest.js
-import React from 'react';
-import {View, StyleSheet} from 'react-native';
->>>>>>> main
+
 import Video from 'react-native-video';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 // import SvgUri from 'react-native-svg-uri';
@@ -66,87 +60,7 @@ const Latest = ({route}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#131D35',
-  },
-  HeadingText: {
-    backgroundColor: '#FFF',
-    width: width * 0.53,
-    height: height * 0.074,
-    borderRadius: width * 0.024,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: height * 0.02,
-  },
-  h1text: {
-    fontSize: height * 0.033,
-    color: '#8352DE',
-    fontFamily: 'OpenSans-ExtraBold',
-  },
-  video: {
-    width: width * 0.9,
-    height: height * 0.24,
-    borderRadius: width * 0.024,
-  },
-});
 
-=======
-import React, {Component} from 'react';
-import {
-  Text,
-  View,
-  StyleSheet,
-  Alert,
-  Dimensions,
-  ScrollView,
-} from 'react-native';
-import Video from 'react-native-video';
-
-const {width, height} = Dimensions.get('window');
-
-class Latest extends Component {
-  render() {
-    // Get the parameters from the route prop.
-    const {imageUrl, name, description, videoUrl, notes} =
-      this.props.route.params;
-
-    return (
-      <ScrollView style={styles.container}>
-        <View style={styles.topcontainer}>
-          <View style={styles.ClassBox}>
-            <Text style={[styles.h1Text, styles.classText]}>CLASESS VIDEO</Text>
-          </View>
-          <View style={styles.videoBox}>
-            <Video
-              source={videoUrl ? {uri: videoUrl} : Alert.alert('Wait')}
-              ref={ref => {
-                this.player = ref;
-              }}
-              style={styles.video}
-              controls={true}
-            />
-          </View>
-        </View>
-        <View style={styles.content}>
-          <Text style={styles.title}>{name}</Text>
-          <Text style={styles.description}>{description}</Text>
-        </View>
-        <View style={styles.noteContainer}>
-          <Text style={styles.noteText}>Notes</Text>
-          <View style={styles.divContent}>
-            <Text>{notes}</Text>
-          </View>
-        </View>
-      </ScrollView>
-    );
-  }
-}
-
->>>>>>> check
 export default Latest;
 
 const styles = StyleSheet.create({
