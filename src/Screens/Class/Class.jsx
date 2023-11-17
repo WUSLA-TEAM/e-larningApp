@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FlatList,
   Image,
@@ -43,7 +43,10 @@ const Class = () => {
     navigation.navigate('Latest', {
       imageUrl: item.imageUrl,
       name: item.name,
+      name: item.name,
       description: item.description,
+      videoUrl: item.videoUrl,
+      notes: item.notes,
       videoUrl: item.videoUrl,
       notes: item.notes,
     });
@@ -51,18 +54,18 @@ const Class = () => {
 
   return (
     <View style={styles.container}>
-      {loading ? ( // show a loading indicator if loading is true
+      {loading ? (
         <ActivityIndicator size="medium" color="#8352DE" />
       ) : (
-        // render the FlatList component if loading is false
         <FlatList
           data={data}
           keyExtractor={item => item.id.toString()}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.list}
-              onPress={() => onItemPress(item)}>
-              <Image source={{uri: item.imageUrl}} style={styles.image} />
+              onPress={() => onItemPress(item)}
+            >
+              <Image source={{ uri: item.imageUrl }} style={styles.image} />
               <View style={styles.content}>
                 <Text style={styles.title}>{item.name}</Text>
                 <Text style={styles.description}>{item.description}</Text>
@@ -73,7 +76,7 @@ const Class = () => {
       )}
     </View>
   );
-};
+          }
 
 export default Class;
 
@@ -85,6 +88,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   list: {
+    width: width * 0.8,
     width: width * 0.8,
     height: height * 0.17,
     display: 'flex',
@@ -105,13 +109,17 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: height * 0.03,
+    fontSize: height * 0.03,
     color: '#FFF',
+    fontFamily: 'OpenSans-ExtraBold',
     fontFamily: 'OpenSans-ExtraBold',
   },
   description: {
     fontSize: 15,
+    fontSize: 15,
     color: '#FFF',
     fontWeight: '400',
+    fontFamily: 'OpenSans-Medium',
     fontFamily: 'OpenSans-Medium',
   },
 });

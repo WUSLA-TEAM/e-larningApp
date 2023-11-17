@@ -36,10 +36,10 @@ function BottomTab() {
       <Bottom.Screen name="Class" component={Class} />
       <Bottom.Screen name="Profile" component={Profile} />
       <Bottom.Screen name="Chat" component={Chat} />
+      {isAdmin && <Bottom.Screen name="Admin" component={Admin} />}
     </Bottom.Navigator>
   );
 }
-
 function StackTab() {
   return (
     <Stack.Navigator

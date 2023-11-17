@@ -178,6 +178,34 @@
 			sourceTree = "<group>";
 			path = "";
 		};
+<<<<<<< HEAD
+		B16E7345C55648C7B4847A24 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				23440902ADC64526BD2FFFAE /* OpenSans-Bold.ttf */,
+				EBB9558CA756487792579B0E /* OpenSans-ExtraBold.ttf */,
+				28C8C99E6570481F84E47EF6 /* OpenSans-Light.ttf */,
+				94A6EC9776484A60B94F9C99 /* OpenSans-Medium.ttf */,
+				3E255E5EBA08467C82F282D9 /* OpenSans-Regular.ttf */,
+				20BD1430AB11432D8A687531 /* OpenSans-SemiBold.ttf */,
+				EA7F1A84570F4C0F998F84C6 /* SF-Pro.ttf */,
+=======
+		5A90F30C11964FAF8C2EBB71 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				ED1B41EE3B8749028D038B85 /* OpenSans-Bold.ttf */,
+				386CB3BD02AF4981A1E5CC6D /* OpenSans-ExtraBold.ttf */,
+				DC60012A96114C1BAE347A6C /* OpenSans-Light.ttf */,
+				C301FF4988E84C219AA71CD6 /* OpenSans-Medium.ttf */,
+				A23098CF6124405F8B39928B /* OpenSans-Regular.ttf */,
+				345952D068D44F71A44C6E9C /* OpenSans-SemiBold.ttf */,
+				1E3142B34C9E4ED7BAE5109C /* SF-Pro.ttf */,
+>>>>>>> check
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */

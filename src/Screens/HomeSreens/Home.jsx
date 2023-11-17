@@ -31,11 +31,12 @@ const Home = () => {
       </View>
     );
   }
+  console.log(`user home ${userData.userData}`);
   return (
     <View style={styles.container}>
       <View style={styles.topSectionbox}>
         <Text style={[styles.h1text, styles.userGreeting]}>
-          Hello {userData.name},
+          Hello {userData.userData.name},
         </Text>
         <Text style={[styles.h1text, styles.WelcomeText]}>Start Lesson!</Text>
         <View style={styles.lessonsSection}>

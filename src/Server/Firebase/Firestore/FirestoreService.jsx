@@ -32,7 +32,9 @@ const FirestoreService = ({children}) => {
   }, []);
 
   return (
-    <UserContext.Provider value={userData}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{userData, isAdmin}}>
+      {children}
+    </UserContext.Provider>
   );
 };
 

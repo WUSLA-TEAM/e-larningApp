@@ -15,15 +15,16 @@ import {useNavigation} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
-const Profile = () => {
+const Profile = ({navigation}) => {
   const userData = useContext(UserContext);
+  const navigation = useNavigation();
   const navigation = useNavigation();
 
   // Check if userInfo is null before accessing its properties
   if (!userData) {
     return (
       <View style={styles.topSectionbox}>
-        <Text style={[styles.h1text, styles.userGreeting]}>
+        <Text style={[styles.h1Text, styles.userGreeting]}>
           Loading user data...
         </Text>
       </View>
@@ -88,6 +89,7 @@ const styles = StyleSheet.create({
   },
   topSection: {
     backgroundColor: '#131D35',
+    backgroundColor: '#131D35',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -107,9 +109,9 @@ const styles = StyleSheet.create({
   },
   middleSection: {
     flex: 1,
-    backgroundColor: '#fff', // Add background color for the product list
+    // backgroundColor: '#242424', // Add background color for the product list
     padding: 20,
-    height: height * 0.0021,
+    height: height * 0.9,
   },
   productItem: {
     borderBottomWidth: 1,
