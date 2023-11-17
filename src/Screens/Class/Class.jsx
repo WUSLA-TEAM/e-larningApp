@@ -35,32 +35,39 @@ const Class = () => {
   }, []);
 
   const onItemPress = item => {
-    console.log(item.videoUrl);
+    console.log(`Image Url : ${item.imageUrl}`);
+    console.log(`Video Url : ${item.videoUrl}`);
     navigation.navigate('Latest', {
       imageUrl: item.imageUrl,
-      title: item.title,
+      name: item.name,
       description: item.description,
-      videoUri: item.videoUrl,
+      videoUrl: item.videoUrl,
+      notes: item.notes,
     });
   };
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={data}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({item}) => (
-          <TouchableOpacity
-            style={styles.list}
-            onPress={() => onItemPress(item)}>
-            <Image source={{uri: item.imageUrl}} style={styles.image} />
-            <View style={styles.content}>
-              <Text style={styles.title}>{item.title}</Text>
-              <Text style={styles.description}>{item.description}</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-      />
+      {loading ? ( // show a loading indicator if loading is true
+        <ActivityIndicator size="medium" color="#8352DE" />
+      ) : (
+        // render the FlatList component if loading is false
+        <FlatList
+          data={data}
+          keyExtractor={item => item.id.toString()}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              style={styles.list}
+              onPress={() => onItemPress(item)}>
+              <Image source={{uri: item.imageUrl}} style={styles.image} />
+              <View style={styles.content}>
+                <Text style={styles.title}>{item.name}</Text>
+                <Text style={styles.description}>{item.description}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+        />
+      )}
     </View>
   );
 };
@@ -75,7 +82,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   list: {
-    width: '100%',
+    width: width * 0.8,
     height: height * 0.17,
     display: 'flex',
     flexDirection: 'row',
@@ -94,15 +101,14 @@ const styles = StyleSheet.create({
     marginLeft: width * 0.021,
   },
   title: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: height * 0.03,
     color: '#FFF',
-    fontFamily: 'OpenSans-Medium',
-    fontWeight: 'bold',
+    fontFamily: 'OpenSans-ExtraBold',
   },
   description: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#FFF',
     fontWeight: '400',
+    fontFamily: 'OpenSans-Medium',
   },
 });

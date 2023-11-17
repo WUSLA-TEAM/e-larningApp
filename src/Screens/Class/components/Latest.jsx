@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {Text} from 'react-native-paper';
+
 import Video from 'react-native-video';
 import Icons from 'react-native-vector-icons/MaterialIcons';
 // import SvgUri from 'react-native-svg-uri';
@@ -59,32 +60,75 @@ const Latest = ({route}) => {
   );
 };
 
+
+export default Latest;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#131D35',
   },
-  HeadingText: {
-    backgroundColor: '#FFF',
-    width: width * 0.53,
-    height: height * 0.074,
-    borderRadius: width * 0.024,
+  h1Text: {
+    fontFamily: 'OpenSans-Bold',
+    fontSize: height * 0.4,
+  },
+  pText: {
+    fontFamily: 'OpenSans-Regular',
+    fontSize: height * 0.017,
+    fontWeight: '400',
+  },
+  topcontainer: {
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: height * 0.02,
+    height: height * 0.5,
   },
-  h1text: {
-    fontSize: height * 0.033,
+  ClassBox: {
+    width: width * 0.5,
+    height: height * 0.08,
+    borderRadius: width * 0.024,
+    backgroundColor: '#FFF',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: height * 0.034,
+  },
+  classText: {
     color: '#8352DE',
-    fontFamily: 'OpenSans-ExtraBold',
+    fontSize: height * 0.02,
   },
-  video: {
-    width: width * 0.9,
-    height: height * 0.24,
+  videoBox: {
+    backgroundColor: '#8352DE',
     borderRadius: width * 0.024,
   },
+  video: {
+    height: height * 0.3,
+    width: width * 0.8,
+    borderRadius: width * 0.024,
+  },
+  content: {
+    padding: 16,
+    paddingHorizontal: width * 0.11,
+  },
+  title: {
+    // textAlign: 'center',
+    color: '#FFF',
+    fontSize: height * 0.05,
+    fontFamily: 'OpenSans-ExtraBold',
+  },
+  description: {
+    fontSize: height * 0.02,
+    color: '#A372FF',
+    fontFamily: 'OpenSans-Medium',
+    // textAlign: 'center',
+  },
+  noteContainer: {
+    paddingHorizontal: width * 0.11,
+    // width: width * 0.9,
+  },
+  noteText: {
+    color: '#A372FF',
+    fontSize: height * 0.03,
+    fontFamily: 'OpenSans-ExtraBold',
+  },
 });
-
-export default Latest;

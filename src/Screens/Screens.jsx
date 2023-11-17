@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
 
 //navigaetion
 import {NavigationContainer} from '@react-navigation/native';
@@ -17,26 +17,37 @@ import Latest from './Class/components/Latest';
 import Profile from './Profile/Profile';
 import Chat from './Massege/chat';
 import Razorpay from './Payment/Razorpay/Razorpay';
-import FirestoreService from '../Server/Firebase/Firestore/FirestoreService';
+import FirestoreService, {
+  UserContext,
+} from '../Server/Firebase/Firestore/FirestoreService';
 import Storage from './AdminScreens/Storage/Storage';
 import ElevatedCards from './Profile/Components/TopCards/ElevatedCards';
+import Admin from './AdminScreens/Admin';
+import AdminForm from './Login/Components/AdminForm';
+import ProfileImage from './HomeSreens/Components/ProfileImage';
+import Account from './Profile/Components/Account/Account';
+import Privacy from './Profile/Components/Privacy/Privacy';
 
 const Stack = createNativeStackNavigator();
-
-//bottom navigation
 const Bottom = createMaterialBottomTabNavigator();
 
 function BottomTab() {
+  const {isAdmin} = useContext(UserContext);
+
+  // Check if userRole is available
+  console.log(`isAdmin: ${isAdmin}`);
+  const userData = useContext(UserContext);
+
   return (
     <Bottom.Navigator initialRouteName="Home">
       <Bottom.Screen name="Home" component={Home} />
       <Bottom.Screen name="Class" component={Class} />
       <Bottom.Screen name="Profile" component={Profile} />
       <Bottom.Screen name="Chat" component={Chat} />
+      {isAdmin && <Bottom.Screen name="Admin" component={Admin} />}
     </Bottom.Navigator>
   );
 }
-
 function StackTab() {
   return (
     <Stack.Navigator
@@ -54,6 +65,11 @@ function StackTab() {
       <Stack.Screen name="Storage" component={Storage} />
       <Stack.Screen name="ElevatedCards" component={ElevatedCards} />
       <Stack.Screen name="Class" component={Class} />
+      <Stack.Screen name="Admin" component={Admin} />
+      <Stack.Screen name="AdminForm" component={AdminForm} />
+      <Stack.Screen name="ProfileImage" component={ProfileImage} />
+      <Stack.Screen name="Account" component={Account} />
+      <Stack.Screen name="Privacy" component={Privacy} />
     </Stack.Navigator>
   );
 }

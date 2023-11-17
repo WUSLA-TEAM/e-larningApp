@@ -1,66 +1,38 @@
-import {Image, StyleSheet, Text, View, Dimensions, Alert} from 'react-native';
 import React, {useState} from 'react';
+import {View, Text, StyleSheet, Image, Dimensions, Alert} from 'react-native';
 import {TextInput, TouchableRipple} from 'react-native-paper';
 import auth from '@react-native-firebase/auth';
-import app from '@react-native-firebase/app';
 import Firestore from '@react-native-firebase/firestore';
-
-//termModal
-import TermsModal from '../Modal/TermsModal';
 
 const userCollection = Firestore().collection('user');
 
-//responsive
 const {width, height} = Dimensions.get('window');
 
-const Login = ({navigation}) => {
-  // auth
+const AdminForm = ({navigation}) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [code, setCode] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('');
 
-  //modal
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const openModal = () => {
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
-
-  //auth
-  const handleAuth = () => {
-    Alert.alert('Hi');
-  };
-
-  //payment button
-  const handlepayment = () => {
-    if (
-      firstName.trim() === '' ||
-      lastName.trim() === '' ||
-      email.trim() === '' ||
-      code.trim() === '' ||
-      phoneNumber.trim() === '' ||
-      password.trim() === ''
-    ) {
-      // Show an alert or error message indicating that all fields are required.
-      Alert.alert('All fields are required');
-    } else {
-      // Navigate to the Payment screen.
-      navigation.navigate('Payment', {
-        firstName,
-        lastName,
+  const handleAuth = async () => {
+    try {
+      const userCredential = await auth().createUserWithEmailAndPassword(
         email,
         password,
-        code,
-        phoneNumber,
+      );
+
+      // Update the user's role to "admin"
+      await userCredential.user.updateProfile({
+        role: 'admin',
       });
+
+      // Navigate to the BottomTab screen
+      navigation.navigate('BottomTab');
+    } catch (error) {
+      console.log('Error creating user:', error);
+      Alert.alert('Error', 'An error occurred while creating the user.');
     }
   };
 
@@ -69,7 +41,7 @@ const Login = ({navigation}) => {
       <View style={styles.sectionCompany}>
         <Image
           style={styles.Logo}
-          source={require('../../../assets/images/logo.png')}
+          source={require('../../../../assets/images/logo.png')}
         />
         <Text style={[styles.h1text, styles.companyName]}>Company Name</Text>
         <Text style={[styles.p1text, styles.companyDes]}>Company Des</Text>
@@ -107,7 +79,6 @@ const Login = ({navigation}) => {
             mode="outline"
             onChangeText={setEmail}
             value={email}
-            keyboardType="email-address"
           />
           <View style={styles.Number}>
             <TextInput
@@ -119,7 +90,6 @@ const Login = ({navigation}) => {
               mode="outline"
               onChangeText={setCode}
               value={code}
-              keyboardType="numeric"
             />
             <TextInput
               // value="Arsh"
@@ -130,7 +100,6 @@ const Login = ({navigation}) => {
               mode="outline"
               onChangeText={setPhoneNumber}
               value={phoneNumber}
-              keyboardType="numeric"
             />
           </View>
           <TextInput
@@ -159,7 +128,7 @@ const Login = ({navigation}) => {
         <View style={styles.authDifferent}>
           <TouchableRipple onPress={handleAuth} style={styles.authButton}>
             <Image
-              source={require('../../../assets/images/google-logo.png')}
+              source={require('../../../../assets/images/google-logo.png')}
               style={[styles.googleImage, styles.authImage]}
             />
           </TouchableRipple>
@@ -167,7 +136,7 @@ const Login = ({navigation}) => {
             onPress={handleAuth}
             style={[styles.authButton, styles.facebookAuth]}>
             <Image
-              source={require('../../../assets/images/facebook-logo.png')}
+              source={require('../../../../assets/images/facebook-logo.png')}
               style={[styles.facebookImage, styles.authImage]}
             />
           </TouchableRipple>
@@ -186,7 +155,7 @@ const Login = ({navigation}) => {
   );
 };
 
-export default Login;
+export default AdminForm;
 
 const styles = StyleSheet.create({
   container: {

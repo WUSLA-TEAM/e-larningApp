@@ -17,12 +17,13 @@ const {width, height} = Dimensions.get('window');
 
 const Profile = ({navigation}) => {
   const userData = useContext(UserContext);
+  const navigation = useNavigation();
 
   // Check if userInfo is null before accessing its properties
   if (!userData) {
     return (
       <View style={styles.topSectionbox}>
-        <Text style={[styles.h1text, styles.userGreeting]}>
+        <Text style={[styles.h1Text, styles.userGreeting]}>
           Loading user data...
         </Text>
       </View>
@@ -37,7 +38,9 @@ const Profile = ({navigation}) => {
           source={require('../../../assets/images/logo.png')}
           style={styles.imageOfUser}
         />
-        <Text style={[styles.UserName, styles.h1Text]}>{userData.name}</Text>
+        <Text style={[styles.UserName, styles.h1Text]}>
+          {userData.userData.name}
+        </Text>
       </View>
       <View style={styles.middleSection}>
         <ElevatedCards style={styles.CardBox} />
