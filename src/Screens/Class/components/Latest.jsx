@@ -59,49 +59,6 @@ const Latest = ({route}) => {
   );
 };
 
-
-export default Latest;
-
-const {width, height} = Dimensions.get('window');
-
-class Latest extends Component {
-  render() {
-    // Get the parameters from the route prop.
-    const {imageUrl, name, description, videoUrl, notes} =
-      this.props.route.params;
-
-    return (
-      <ScrollView style={styles.container}>
-        <View style={styles.topcontainer}>
-          <View style={styles.ClassBox}>
-            <Text style={[styles.h1Text, styles.classText]}>CLASESS VIDEO</Text>
-          </View>
-          <View style={styles.videoBox}>
-            <Video
-              source={videoUrl ? {uri: videoUrl} : Alert.alert('Wait')}
-              ref={ref => {
-                this.player = ref;
-              }}
-              style={styles.video}
-              controls={true}
-            />
-          </View>
-        </View>
-        <View style={styles.content}>
-          <Text style={styles.title}>{name}</Text>
-          <Text style={styles.description}>{description}</Text>
-        </View>
-        <View style={styles.noteContainer}>
-          <Text style={styles.noteText}>Notes</Text>
-          <View style={styles.divContent}>
-            <Text>{notes}</Text>
-          </View>
-        </View>
-      </ScrollView>
-    );
-  }
-}
-
 export default Latest;
 
 const styles = StyleSheet.create({

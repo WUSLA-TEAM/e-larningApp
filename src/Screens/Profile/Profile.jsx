@@ -15,9 +15,8 @@ import {useNavigation} from '@react-navigation/native';
 
 const {width, height} = Dimensions.get('window');
 
-const Profile = ({navigation}) => {
+const Profile = () => {
   const userData = useContext(UserContext);
-  const navigation = useNavigation();
   const navigation = useNavigation();
 
   // Check if userInfo is null before accessing its properties

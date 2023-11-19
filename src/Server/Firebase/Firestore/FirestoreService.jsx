@@ -8,6 +8,7 @@ export const UserContext = createContext();
 
 const FirestoreService = ({children}) => {
   const [userData, setUserData] = useState({});
+  const [isAdmin, setIsAdmin] = useState(false); // Set the initial value accordingly
 
   useEffect(() => {
     const checkUser = auth().currentUser;
@@ -21,13 +22,18 @@ const FirestoreService = ({children}) => {
 
       userDocument.get().then(documentSnapshot => {
         if (documentSnapshot.exists) {
-          setUserData(documentSnapshot.data());
+          const userData = documentSnapshot.data();
+          setUserData(userData);
+
+          // Assuming isAdmin is a property in your user data
+          setIsAdmin(userData.isAdmin || false);
         }
       });
     } else {
       // Handle the case when there is no user logged in
       // For example, you can set userData to an empty object or null
       setUserData({});
+      setIsAdmin(false);
     }
   }, []);
 
