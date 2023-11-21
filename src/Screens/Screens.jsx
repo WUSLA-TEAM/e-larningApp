@@ -35,7 +35,6 @@ function BottomTab() {
       <Bottom.Screen name="Home" component={Home} />
       <Bottom.Screen name="Class" component={Class} />
       <Bottom.Screen name="Profile" component={Profile} />
-      <Bottom.Screen name="Chat" component={Chat} />
       {/* <Bottom.Screen name="Admin" component={Admin} /> */}
     </Bottom.Navigator>
   );
@@ -43,8 +42,8 @@ function BottomTab() {
 function StackTab() {
   return (
     <Stack.Navigator
-      screenOptions={{headerShown: false}}
-      initialRouteName="Start">
+    screenOptions={{headerShown: false}}
+    initialRouteName="Start">
       <Stack.Screen name="Start" component={Start} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Sign" component={Sign} />
@@ -55,6 +54,7 @@ function StackTab() {
       <Stack.Screen name="Razorpay" component={Razorpay} />
       <Stack.Screen name="FirestoreService" component={FirestoreService} />
       <Stack.Screen name="Storage" component={Storage} />
+      <Stack.Screen name="Chat" component={Chat} />
       <Stack.Screen name="ProfileImage" component={ProfileImage} />
       <Stack.Screen name="Account" component={Account} />
       <Stack.Screen name="Privacy" component={Privacy} />

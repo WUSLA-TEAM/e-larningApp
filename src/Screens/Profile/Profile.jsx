@@ -46,25 +46,25 @@ const Profile = () => {
           onPress={() => navigation.navigate('Account')}
           rippleColor="rgba(0, 0, 0, .32)"
           style={[styles.box]}>
-          <Text>Account Info</Text>
+          <Text style={[styles.pText, styles.boxText]}>Account Info</Text>
         </TouchableRipple>
         <TouchableRipple
           onPress={() => navigation.navigate('Privacy')}
           rippleColor="rgba(0, 0, 0, .32)"
           style={[styles.box]}>
-          <Text>Privacy Policy</Text>
+          <Text style={[styles.pText, styles.boxText]}>Privacy Policy</Text>
+        </TouchableRipple>
+        <TouchableRipple
+          onPress={() => navigation.navigate('Chat')}
+          rippleColor="rgba(0, 0, 0, .32)"
+          style={[styles.box]}>
+          <Text style={[styles.pText, styles.boxText]}>Chat</Text>
         </TouchableRipple>
         <TouchableRipple
           onPress={() => console.log('Pressed')}
           rippleColor="rgba(0, 0, 0, .32)"
           style={[styles.box]}>
-          <Text>Press anywhere</Text>
-        </TouchableRipple>
-        <TouchableRipple
-          onPress={() => console.log('Pressed')}
-          rippleColor="rgba(0, 0, 0, .32)"
-          style={[styles.box]}>
-          <Text>Press anywhere</Text>
+          <Text style={[styles.pText, styles.boxText]}>Press anywhere</Text>
         </TouchableRipple>
       </View>
     </View>
@@ -136,7 +136,12 @@ const styles = StyleSheet.create({
     padding: height * 0.015,
     marginTop: height * 0.015,
     borderRadius: width * 0.024,
+    color: '#FFF',
   },
+  boxText : {
+    color : '#FFF',
+    overflow: 'visible'
+  }
 });
 
 export default Profile;
