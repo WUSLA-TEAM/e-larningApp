@@ -1,4 +1,4 @@
-package com.wusla.projectapp;
+package com.wusla.hkapp;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

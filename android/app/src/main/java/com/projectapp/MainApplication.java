@@ -1,4 +1,4 @@
-package com.wusla.projectapp;
+package com.wusla.hkapp;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

@@ -74,9 +74,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.wusla.projectapp"
+    namespace "com.wusla.hkapp"
     defaultConfig {
-        applicationId "com.wusla.projectapp"
+        applicationId "com.wusla.hkapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
